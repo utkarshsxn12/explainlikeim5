@@ -15,29 +15,41 @@ function sanitizeExplanation(raw) {
 
   if (text.includes('</think>')) {
     text = text.split('</think>').pop();
-  } else if (text.includes('<think>')) {
-    return '';
   }
 
-  if (text.includes("Here's a thinking process:")) {
-    const headingIndex = text.search(/\n##\s+|\n-\s+/);
-    if (headingIndex !== -1) {
-      text = text.slice(headingIndex);
-    } else {
-      return '';
-    }
-  }
+  text = text.replace(/<think>[\s\S]*?<\/think>/gi, '').replace(/<think>[\s\S]*/gi, '');
 
   const lines = text.split('\n');
-  const cleanLines = lines.filter(line => {
+  let inPlanningBlock = false;
+  const cleanLines = [];
+
+  for (const line of lines) {
     const trimmed = line.trim();
-    if (!trimmed) return true;
-    if (trimmed.startsWith('<think>') || trimmed.startsWith('</think>')) return false;
-    if (trimmed.includes("Here's a thinking process")) return false;
-    if (/^-\s*(Analyze|Topic:|Target Audience|Critical Instruction|Required Structure|Constraints|Deconstruct|Format:|Count:|Length:|Vocabulary:|No jargon|Check Constraints|Only bullet|5-6 bullets|Each starts|Brainstorming Content)/i.test(trimmed)) return false;
-    if (/^(Analyze User Input|Target Audience|Critical Instruction|Required Structure|Constraints|Deconstruct Constraints|Check Constraints):?$/i.test(trimmed)) return false;
-    return true;
-  });
+
+    if (
+      trimmed.startsWith('<think>') ||
+      trimmed.includes("Here's a thinking process") ||
+      /^-\s*(Analyze User Input|Topic:|Target Audience|Format Requirements|Required Structure|Tone\/Style|Constraints|Deconstruct|Format:|Count:|Length:|Vocabulary:|No jargon|Check Constraints|Only bullet|5-6 bullets|Each starts|Brainstorming Content)/i.test(trimmed) ||
+      /^(Analyze User Input|Target Audience|Format Requirements|Required Structure|Tone\/Style|Constraints|Deconstruct Constraints|Check Constraints):?$/i.test(trimmed)
+    ) {
+      inPlanningBlock = true;
+      continue;
+    }
+
+    if (
+      /^-\s*(Output ONLY|Structure:|No system rules|No extra text|Keep the|Provide exactly|Use simple|Zero technical|Each bullet|Clear, appropriate)/i.test(trimmed)
+    ) {
+      continue;
+    }
+
+    if (trimmed.startsWith('##') || /^-\s*"?[A-Z0-9]/.test(trimmed)) {
+      inPlanningBlock = false;
+    }
+
+    if (!inPlanningBlock) {
+      cleanLines.push(line);
+    }
+  }
 
   return cleanLines.join('\n').trim();
 }
