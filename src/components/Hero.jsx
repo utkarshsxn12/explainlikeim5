@@ -73,17 +73,18 @@ export function Hero({ topic, setTopic, onSubmit, isLoading, activeTopic }) {
         initial={{ opacity: 0, y: 15 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.1 }}
-        className="font-display text-3xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-[1.2] mb-6 min-h-[2.4em] sm:min-h-[2.2em] text-center"
+        className="font-display text-3xl sm:text-5xl md:text-6xl font-extrabold tracking-tight leading-[1.2] mb-6 text-center w-full"
       >
-        <span className="inline">
-          {activeTopic ? formattedActiveTopic : currentText}
+        <div className="text-slate-900 dark:text-white block min-h-[1.25em] mb-1">
+          <span>{activeTopic ? formattedActiveTopic : currentText}</span>
           {!activeTopic && (
             <span className="inline-block w-1 sm:w-1.5 h-[0.85em] bg-indigo-500 ml-1.5 animate-pulse rounded-full align-middle"></span>
           )}
-        </span>{' '}
-        <span className="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-500 bg-clip-text text-transparent underline decoration-amber-400 decoration-wavy decoration-2 inline-block">
+        </div>
+
+        <div className="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-500 bg-clip-text text-transparent underline decoration-amber-400 decoration-wavy decoration-2 block">
           Explained like you're 5.
-        </span>
+        </div>
       </motion.h1>
 
       <motion.p 
