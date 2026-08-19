@@ -85,14 +85,16 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0A0A0A] text-neutral-100 flex flex-col transition-colors duration-300 relative overflow-hidden font-sans bg-grain">
+    <div className="min-h-screen bg-slate-50 dark:bg-[#0A0A0A] text-slate-900 dark:text-neutral-100 flex flex-col transition-colors duration-300 relative overflow-hidden font-sans bg-grain">
+      <div className="absolute top-12 left-1/2 -translate-x-1/2 w-[600px] h-[350px] bg-lime-500/10 dark:bg-[#C6FF00]/8 rounded-full blur-[120px] pointer-events-none"></div>
+
       <Navbar 
         isDarkMode={isDarkMode} 
         onToggleDarkMode={handleToggleDarkMode} 
         sessionCount={sessionCount} 
       />
 
-      <main className="flex-1 max-w-5xl mx-auto w-full px-4 pb-16 flex flex-col items-center">
+      <main className="flex-1 max-w-5xl mx-auto w-full px-4 pb-16 flex flex-col items-center relative z-10">
         <Hero 
           topic={topic} 
           setTopic={setTopic} 
@@ -100,6 +102,8 @@ export default function App() {
           isLoading={isLoading} 
           activeTopic={activeTopic}
         />
+
+        <div className="w-full max-w-3xl border-t border-slate-200 dark:border-neutral-800/60 my-2"></div>
 
         <ComplexitySlider 
           selectedLevel={selectedLevel} 
@@ -116,6 +120,8 @@ export default function App() {
           onSelectTopic={(t) => handleRunExplanation(t, selectedLevel)} 
         />
 
+        <div className="w-full max-w-3xl border-t border-slate-200 dark:border-neutral-800/60 my-2"></div>
+
         <ExplanationCard 
           topic={activeTopic}
           explanationText={explanationText}
@@ -128,10 +134,10 @@ export default function App() {
         />
       </main>
 
-      <footer className="w-full border-t border-neutral-800 py-6 text-center text-xs font-mono text-neutral-400">
+      <footer className="w-full border-t border-slate-200 dark:border-neutral-800 py-6 text-center text-xs font-mono text-slate-500 dark:text-neutral-400 relative z-10">
         <div className="max-w-5xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-2 uppercase tracking-wider">
           <span>ELI5 — GROQ STREAMING PIPELINE ⚡</span>
-          <span className="text-[#C6FF00] font-bold">NO PHD REQUIRED</span>
+          <span className="text-lime-600 dark:text-[#C6FF00] font-bold">NO PHD REQUIRED</span>
         </div>
       </footer>
 

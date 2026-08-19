@@ -7,16 +7,11 @@
   --font-serif: 'Instrument Serif', serif;
   --font-mono: 'JetBrains Mono', monospace;
   --color-lime-accent: #C6FF00;
-  --color-charcoal-bg: #0A0A0A;
-  --color-card-dark: #121212;
-  --color-border-dark: #222222;
 }
 
 @layer base {
   body {
     font-family: 'Inter', sans-serif;
-    background-color: #0A0A0A;
-    color: #F5F5F5;
     overflow-x: hidden;
   }
 }
@@ -30,7 +25,7 @@
 }
 
 .bg-grain {
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.03'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.035'/%3E%3C/svg%3E");
 }
 
 @keyframes cursorBlink {
@@ -47,6 +42,12 @@
 }
 
 .shimmer-bg {
+  background: linear-gradient(90deg, rgba(200, 200, 200, 0.1) 0%, rgba(200, 200, 200, 0.25) 50%, rgba(200, 200, 200, 0.1) 100%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+.dark .shimmer-bg {
   background: linear-gradient(90deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.08) 50%, rgba(255, 255, 255, 0.03) 100%);
   background-size: 200% 100%;
   animation: shimmer 1.5s infinite;
