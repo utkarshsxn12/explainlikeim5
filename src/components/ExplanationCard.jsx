@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import ReactMarkdown from 'react-markdown';
-import { Copy, Check, AlertCircle, RefreshCw, BookOpen, GraduationCap, PlayCircle, ExternalLink } from 'lucide-react';
+import { Copy, Check, AlertCircle, RefreshCw, BookOpen, GraduationCap, PlayCircle, ExternalLink, Sparkles, Terminal, ShieldAlert } from 'lucide-react';
 import { COMPLEXITY_LEVELS } from '../utils/prompts';
 
 export function ExplanationCard({ 
@@ -38,25 +38,25 @@ export function ExplanationCard({
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -15 }}
-            className="p-6 bg-rose-50 dark:bg-[#121212] border border-rose-300 dark:border-rose-900/60 text-rose-900 dark:text-neutral-200 text-left shadow-2xl"
+            className="p-6 rounded-2xl bg-rose-50 dark:bg-[#180A0A] border-2 border-rose-300 dark:border-rose-900/80 text-rose-900 dark:text-rose-200 text-left shadow-2xl"
           >
-            <div className="flex items-center gap-3 mb-3 text-rose-600 dark:text-rose-500 font-mono text-xs font-bold uppercase tracking-wider">
-              <AlertCircle className="w-4 h-4" />
-              <span>Execution Error</span>
+            <div className="flex items-center gap-3 mb-3 text-rose-600 dark:text-rose-400 font-mono text-xs font-bold uppercase tracking-wider">
+              <AlertCircle className="w-5 h-5" />
+              <span>Pipeline Failure</span>
             </div>
-            <h3 className="font-serif italic font-bold text-xl text-rose-950 dark:text-white mb-2">
+            <h3 className="font-serif italic font-bold text-2xl text-rose-950 dark:text-white mb-2">
               Even we got confused. Try again?
             </h3>
-            <p className="text-xs text-rose-700 dark:text-neutral-400 font-mono mb-4">
+            <p className="text-xs text-rose-700 dark:text-rose-300 font-mono mb-4">
               {error}
             </p>
             {onRetry && (
               <button
                 onClick={onRetry}
-                className="inline-flex items-center gap-2 px-4 py-2 bg-rose-600 hover:bg-rose-500 text-white font-mono text-xs uppercase tracking-wider transition-colors"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-mono text-xs font-bold uppercase tracking-wider transition-colors shadow-md"
               >
-                <RefreshCw className="w-3.5 h-3.5" />
-                <span>RETRY REQUEST</span>
+                <RefreshCw className="w-4 h-4" />
+                <span>RETRY PIPELINE</span>
               </button>
             )}
           </motion.div>
@@ -66,25 +66,31 @@ export function ExplanationCard({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="p-8 bg-white dark:bg-[#121212] border border-slate-300 dark:border-neutral-800 shadow-xl relative overflow-hidden"
+            className={`p-8 shadow-xl relative overflow-hidden transition-all duration-300 ${
+              levelKey === 'CHILD' 
+                ? 'rounded-3xl bg-rose-50/90 dark:bg-rose-950/30 border-2 border-rose-300 dark:border-rose-800' 
+                : levelKey === 'TEEN' 
+                ? 'rounded-xl bg-slate-900/95 dark:bg-[#0A0E17] border-2 border-cyan-500/50 shadow-[0_0_30px_rgba(0,229,255,0.15)]'
+                : 'rounded-md bg-[#0D1117] border border-slate-700/90'
+            }`}
           >
             <div className="flex items-center justify-between mb-6 border-b border-slate-200 dark:border-neutral-800 pb-4">
               <div className="flex items-center gap-3">
                 <div 
-                  className="w-2.5 h-2.5 rounded-full animate-ping"
+                  className="w-3 h-3 rounded-full animate-ping"
                   style={{ backgroundColor: levelInfo.accentColor }}
                 ></div>
-                <span className="font-mono text-xs text-slate-500 dark:text-neutral-400 uppercase tracking-widest">
-                  Processing {levelInfo.shortLabel} Stream...
+                <span className="font-mono text-xs text-slate-500 dark:text-neutral-400 uppercase tracking-widest font-bold">
+                  Streaming {levelInfo.shortLabel} Mode Response...
                 </span>
               </div>
             </div>
 
             <div className="space-y-3">
-              <div className="h-4 bg-slate-200 dark:bg-neutral-800/80 rounded-none w-full shimmer-bg"></div>
-              <div className="h-4 bg-slate-200 dark:bg-neutral-800/80 rounded-none w-11/12 shimmer-bg"></div>
-              <div className="h-4 bg-slate-200 dark:bg-neutral-800/80 rounded-none w-4/5 shimmer-bg"></div>
-              <div className="h-4 bg-slate-200 dark:bg-neutral-800/80 rounded-none w-3/4 shimmer-bg"></div>
+              <div className="h-4 bg-slate-200 dark:bg-neutral-800/80 rounded-lg w-full shimmer-bg"></div>
+              <div className="h-4 bg-slate-200 dark:bg-neutral-800/80 rounded-lg w-11/12 shimmer-bg"></div>
+              <div className="h-4 bg-slate-200 dark:bg-neutral-800/80 rounded-lg w-4/5 shimmer-bg"></div>
+              <div className="h-4 bg-slate-200 dark:bg-neutral-800/80 rounded-lg w-3/4 shimmer-bg"></div>
             </div>
           </motion.div>
         ) : explanationText ? (
@@ -92,150 +98,252 @@ export function ExplanationCard({
             key="result"
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
-            className={`relative p-6 sm:p-8 bg-white dark:bg-[#121212] border shadow-2xl transition-colors duration-300 ${levelInfo.cardBorder}`}
+            className="w-full"
           >
-            <div className="flex flex-wrap items-center justify-between gap-3 mb-6 border-b border-slate-200 dark:border-neutral-800 pb-4">
-              <div className="flex items-center gap-3">
-                <span 
-                  className="px-2.5 py-1 font-mono text-xs font-bold border"
-                  style={{ 
-                    color: levelInfo.accentColor,
-                    borderColor: `${levelInfo.accentColor}40`,
-                    backgroundColor: `${levelInfo.accentColor}10`
-                  }}
-                >
-                  {levelInfo.code}
-                </span>
-                <div>
-                  <h3 className="font-serif italic font-bold text-2xl text-slate-900 dark:text-white capitalize leading-none mb-1">
-                    {topic}
-                  </h3>
-                  <p className="font-mono text-[10px] uppercase tracking-wider font-semibold" style={{ color: levelInfo.accentColor }}>
-                    {levelInfo.badge}
-                  </p>
+            {levelKey === 'CHILD' && (
+              <div className="relative p-6 sm:p-8 rounded-3xl bg-gradient-to-b from-rose-50/90 via-amber-50/50 to-white dark:from-rose-950/40 dark:via-slate-900/90 dark:to-slate-950 border-2 border-rose-300 dark:border-rose-800/80 shadow-2xl text-slate-900 dark:text-rose-50">
+                <div className="flex flex-wrap items-center justify-between gap-3 mb-6 border-b border-rose-200 dark:border-rose-900/50 pb-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-2xl bg-rose-400 text-white flex items-center justify-center text-xl font-bold shadow-md shadow-rose-400/30">
+                      🧒
+                    </div>
+                    <div>
+                      <span className="inline-block px-2.5 py-0.5 rounded-full bg-rose-200 dark:bg-rose-900/80 text-rose-800 dark:text-rose-200 font-bold text-[11px] uppercase tracking-wider mb-1">
+                        KINDERGARTEN PLAYGROUND EDITION
+                      </span>
+                      <h3 className="font-bold text-2xl text-slate-900 dark:text-white capitalize leading-none">
+                        {topic}
+                      </h3>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    {latencyMetrics && (
+                      <span className="px-3 py-1 rounded-full bg-amber-100 dark:bg-amber-950/80 border border-amber-300 dark:border-amber-800 text-amber-800 dark:text-amber-300 font-bold text-xs">
+                        ⚡ {(latencyMetrics.latencyMs / 1000).toFixed(2)}s
+                      </span>
+                    )}
+
+                    <button
+                      onClick={handleCopy}
+                      className="p-2 rounded-xl bg-white dark:bg-slate-800 border border-rose-200 dark:border-rose-800 hover:bg-rose-100 dark:hover:bg-slate-700 text-slate-700 dark:text-rose-200 transition-colors"
+                      title="Copy explanation"
+                    >
+                      {copied ? <Check className="w-4 h-4 text-emerald-600" /> : <Copy className="w-4 h-4" />}
+                    </button>
+                  </div>
                 </div>
-              </div>
 
-              <div className="flex items-center gap-3">
-                {latencyMetrics && (
-                  <motion.div 
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    className="px-3 py-1 bg-slate-100 dark:bg-neutral-950 border border-slate-300 dark:border-neutral-800 font-mono text-xs font-bold"
-                    style={{ color: levelInfo.accentColor }}
+                <div className={`relative text-base sm:text-lg text-slate-800 dark:text-rose-100 leading-relaxed font-medium ${isStreaming ? 'typing-cursor' : ''}`}>
+                  <ReactMarkdown
+                    components={{
+                      p: ({node, ...props}) => <p className="mb-4 leading-relaxed text-slate-800 dark:text-rose-100" {...props} />,
+                      ul: ({node, ...props}) => <ul className="space-y-3 mb-6" {...props} />,
+                      li: ({node, ...props}) => (
+                        <li className="flex items-start gap-3 bg-white/80 dark:bg-rose-950/40 p-3.5 rounded-2xl border border-rose-200/80 dark:border-rose-900/40 shadow-xs" {...props}>
+                          <span className="text-xl">🎈</span>
+                          <span className="font-semibold text-slate-800 dark:text-rose-100">{props.children}</span>
+                        </li>
+                      ),
+                      strong: ({node, ...props}) => <strong className="font-extrabold text-rose-600 dark:text-rose-300" {...props} />
+                    }}
                   >
-                    {(latencyMetrics.latencyMs / 1000).toFixed(2)}s LATENCY
-                  </motion.div>
-                )}
-
-                <button
-                  onClick={handleCopy}
-                  className="p-2 bg-slate-100 dark:bg-neutral-900 border border-slate-300 dark:border-neutral-800 transition-colors"
-                  style={{ borderColor: copied ? levelInfo.accentColor : undefined }}
-                  title="Copy explanation"
-                >
-                  {copied ? <Check className="w-4 h-4" style={{ color: levelInfo.accentColor }} /> : <Copy className="w-4 h-4 text-slate-700 dark:text-neutral-300" />}
-                </button>
-              </div>
-            </div>
-
-            <div className={`relative text-base sm:text-lg text-slate-800 dark:text-neutral-200 leading-relaxed font-normal ${isStreaming ? 'typing-cursor' : ''}`}>
-              <ReactMarkdown
-                components={{
-                  h2: ({node, ...props}) => (
-                    <h2 
-                      className="font-serif italic font-bold text-2xl sm:text-3xl mt-8 mb-4 border-b border-slate-200 dark:border-neutral-800 pb-2" 
-                      style={{ color: levelInfo.accentColor }}
-                      {...props} 
-                    />
-                  ),
-                  h3: ({node, ...props}) => <h3 className="font-sans font-semibold text-lg sm:text-xl text-slate-900 dark:text-white mt-6 mb-3" {...props} />,
-                  p: ({node, ...props}) => <p className="mb-4 leading-relaxed text-slate-700 dark:text-neutral-300" {...props} />,
-                  ul: ({node, ...props}) => <ul className="list-disc list-outside ml-5 space-y-2 mb-6" {...props} />,
-                  ol: ({node, ...props}) => <ol className="list-decimal list-outside ml-5 space-y-2 mb-6" {...props} />,
-                  li: ({node, ...props}) => <li className="text-slate-800 dark:text-neutral-200 font-normal pl-1" {...props} />,
-                  strong: ({node, ...props}) => <strong className="font-bold text-slate-900 dark:text-white" style={{ color: levelInfo.accentColor }} {...props} />,
-                  code: ({node, ...props}) => <code className="px-1.5 py-0.5 bg-slate-100 dark:bg-neutral-900 border border-slate-300 dark:border-neutral-800 font-mono text-xs" style={{ color: levelInfo.accentColor }} {...props} />
-                }}
-              >
-                {explanationText}
-              </ReactMarkdown>
-            </div>
-
-            {latencyMetrics && !isStreaming && (
-              <div className="mt-8 pt-4 border-t border-slate-200 dark:border-neutral-800 flex items-center justify-between font-mono text-[10px] text-slate-500 dark:text-neutral-400 uppercase tracking-wider">
-                <span>
-                  TTFB: {latencyMetrics.ttfbMs}ms
-                </span>
-                <span className="font-bold" style={{ color: levelInfo.accentColor }}>
-                  {levelInfo.code} MODE COMPLETED
-                </span>
+                    {explanationText}
+                  </ReactMarkdown>
+                </div>
               </div>
             )}
 
-            {levelKey === 'EXPERT' && !isStreaming && explanationText && (
-              <motion.div 
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4, delay: 0.1 }}
-                className="mt-8 pt-6 border-t border-slate-200 dark:border-neutral-800"
-              >
-                <div className="font-mono text-xs font-bold text-lime-700 dark:text-[#C6FF00] uppercase tracking-widest mb-4 flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-lime-500 dark:bg-[#C6FF00]"></span>
-                  <span>GO DEEPER</span>
+            {levelKey === 'TEEN' && (
+              <div className="relative p-6 sm:p-8 rounded-xl bg-slate-900/95 dark:bg-[#0A0E17] border-2 border-cyan-500/60 shadow-[0_0_30px_rgba(0,229,255,0.15)] text-cyan-50">
+                <div className="flex flex-wrap items-center justify-between gap-3 mb-6 border-b border-cyan-800/60 pb-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-lg bg-[#00E5FF] text-slate-950 flex items-center justify-center text-xl font-bold shadow-lg shadow-cyan-500/20">
+                      🧑
+                    </div>
+                    <div>
+                      <span className="inline-block px-3 py-0.5 rounded-none bg-cyan-950 text-[#00E5FF] border border-cyan-800 font-mono text-[10px] uppercase tracking-widest mb-1">
+                        CYBER HIGH-SCHOOL EDITION v15
+                      </span>
+                      <h3 className="font-mono font-bold text-2xl text-white capitalize leading-none">
+                        {topic}
+                      </h3>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    {latencyMetrics && (
+                      <span className="px-3 py-1 font-mono text-xs font-bold bg-cyan-950 text-[#00E5FF] border border-cyan-800">
+                        [SPEED: {(latencyMetrics.latencyMs / 1000).toFixed(2)}s]
+                      </span>
+                    )}
+
+                    <button
+                      onClick={handleCopy}
+                      className="p-2 bg-slate-800 border border-cyan-800 hover:border-[#00E5FF] text-cyan-300 transition-colors"
+                      title="Copy explanation"
+                    >
+                      {copied ? <Check className="w-4 h-4 text-[#00E5FF]" /> : <Copy className="w-4 h-4" />}
+                    </button>
+                  </div>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-3">
-                  <a
-                    href={wikiUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center justify-between p-3.5 bg-slate-50 dark:bg-neutral-950 border border-slate-300 dark:border-neutral-800 text-slate-800 dark:text-neutral-200 hover:border-lime-500 dark:hover:border-[#C6FF00] hover:text-lime-700 dark:hover:text-[#C6FF00] hover:-translate-y-0.5 hover:shadow-md transition-all duration-200 group rounded-none"
+                <div className={`relative text-base sm:text-lg text-slate-200 leading-relaxed font-sans ${isStreaming ? 'typing-cursor' : ''}`}>
+                  <ReactMarkdown
+                    components={{
+                      h2: ({node, ...props}) => <h2 className="font-mono font-bold text-xl sm:text-2xl text-[#00E5FF] mt-6 mb-3 border-b border-cyan-900/60 pb-1.5 uppercase tracking-wide" {...props} />,
+                      h3: ({node, ...props}) => <h3 className="font-mono font-semibold text-lg text-indigo-300 mt-4 mb-2" {...props} />,
+                      p: ({node, ...props}) => <p className="mb-4 leading-relaxed text-slate-200" {...props} />,
+                      ul: ({node, ...props}) => <ul className="list-disc list-outside ml-5 space-y-2 mb-6" {...props} />,
+                      li: ({node, ...props}) => <li className="text-slate-200 font-medium pl-1" {...props} />,
+                      strong: ({node, ...props}) => <strong className="font-bold text-[#00E5FF]" {...props} />
+                    }}
                   >
-                    <div className="flex items-center gap-2.5 min-w-0 pr-2">
-                      <BookOpen className="w-4 h-4 shrink-0 text-slate-500 dark:text-neutral-400 group-hover:text-lime-600 dark:group-hover:text-[#C6FF00]" />
-                      <span className="text-xs font-mono font-medium truncate">
-                        Wikipedia — {topic}
-                      </span>
-                    </div>
-                    <ExternalLink className="w-3.5 h-3.5 shrink-0 opacity-60 group-hover:opacity-100 transition-opacity" />
-                  </a>
+                    {explanationText}
+                  </ReactMarkdown>
+                </div>
+              </div>
+            )}
 
-                  <a
-                    href={scholarUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center justify-between p-3.5 bg-slate-50 dark:bg-neutral-950 border border-slate-300 dark:border-neutral-800 text-slate-800 dark:text-neutral-200 hover:border-lime-500 dark:hover:border-[#C6FF00] hover:text-lime-700 dark:hover:text-[#C6FF00] hover:-translate-y-0.5 hover:shadow-md transition-all duration-200 group rounded-none"
-                  >
-                    <div className="flex items-center gap-2.5 min-w-0 pr-2">
-                      <GraduationCap className="w-4 h-4 shrink-0 text-slate-500 dark:text-neutral-400 group-hover:text-lime-600 dark:group-hover:text-[#C6FF00]" />
-                      <span className="text-xs font-mono font-medium truncate">
-                        Google Scholar
-                      </span>
-                    </div>
-                    <ExternalLink className="w-3.5 h-3.5 shrink-0 opacity-60 group-hover:opacity-100 transition-opacity" />
-                  </a>
-
-                  <a
-                    href={youtubeUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center justify-between p-3.5 bg-slate-50 dark:bg-neutral-950 border border-slate-300 dark:border-neutral-800 text-slate-800 dark:text-neutral-200 hover:border-lime-500 dark:hover:border-[#C6FF00] hover:text-lime-700 dark:hover:text-[#C6FF00] hover:-translate-y-0.5 hover:shadow-md transition-all duration-200 group rounded-none"
-                  >
-                    <div className="flex items-center gap-2.5 min-w-0 pr-2">
-                      <PlayCircle className="w-4 h-4 shrink-0 text-slate-500 dark:text-neutral-400 group-hover:text-lime-600 dark:group-hover:text-[#C6FF00]" />
-                      <span className="text-xs font-mono font-medium truncate">
-                        YouTube Deep-Dives
-                      </span>
-                    </div>
-                    <ExternalLink className="w-3.5 h-3.5 shrink-0 opacity-60 group-hover:opacity-100 transition-opacity" />
-                  </a>
+            {levelKey === 'EXPERT' && (
+              <div className="relative p-6 sm:p-8 rounded-md bg-[#0D1117] border border-slate-700/90 shadow-2xl text-neutral-200">
+                <div className="flex items-center justify-between bg-slate-900 px-4 py-2 border-b border-slate-800 -mx-6 sm:-mx-8 -mt-6 sm:-mt-8 mb-6 rounded-t-md">
+                  <div className="flex items-center gap-2">
+                    <span className="w-3 h-3 rounded-full bg-rose-500 inline-block"></span>
+                    <span className="w-3 h-3 rounded-full bg-amber-500 inline-block"></span>
+                    <span className="w-3 h-3 rounded-full bg-emerald-500 inline-block"></span>
+                    <span className="font-mono text-xs text-slate-400 ml-2">
+                      terminal://domain_expert_analysis.sh
+                    </span>
+                  </div>
+                  <span className="font-mono text-[10px] text-[#C6FF00] uppercase tracking-widest">
+                    TELEMETRY ACTIVE
+                  </span>
                 </div>
 
-                <p className="font-mono text-[10px] text-slate-400 dark:text-neutral-500 text-left">
-                  Links generated from your search topic — not verified for accuracy of external content.
-                </p>
-              </motion.div>
+                <div className="flex flex-wrap items-center justify-between gap-3 mb-6 border-b border-slate-800 pb-4">
+                  <div className="flex items-center gap-3">
+                    <span className="px-3 py-1 font-mono text-xs font-bold bg-neutral-900 border border-slate-700 text-[#C6FF00]">
+                      GRADUATE / EXP
+                    </span>
+                    <div>
+                      <h3 className="font-serif italic font-bold text-3xl text-white capitalize leading-none mb-1">
+                        {topic}
+                      </h3>
+                      <p className="font-mono text-[10px] uppercase text-slate-400 tracking-wider">
+                        DOM: TECHNICAL_RIGOR_NODE
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-3">
+                    {latencyMetrics && (
+                      <span className="px-3 py-1 bg-neutral-900 border border-slate-700 text-[#C6FF00] font-mono text-xs font-bold">
+                        {(latencyMetrics.latencyMs / 1000).toFixed(2)}s LATENCY
+                      </span>
+                    )}
+
+                    <button
+                      onClick={handleCopy}
+                      className="p-2 bg-neutral-900 border border-slate-700 hover:border-[#C6FF00] text-neutral-300 transition-colors"
+                      title="Copy explanation"
+                    >
+                      {copied ? <Check className="w-4 h-4 text-[#C6FF00]" /> : <Copy className="w-4 h-4" />}
+                    </button>
+                  </div>
+                </div>
+
+                <div className={`relative text-base sm:text-lg text-neutral-200 leading-relaxed font-normal ${isStreaming ? 'typing-cursor' : ''}`}>
+                  <ReactMarkdown
+                    components={{
+                      h2: ({node, ...props}) => <h2 className="font-serif italic font-bold text-2xl sm:text-3xl text-[#C6FF00] mt-8 mb-4 border-b border-slate-800 pb-2" {...props} />,
+                      h3: ({node, ...props}) => <h3 className="font-sans font-semibold text-lg text-white mt-6 mb-3" {...props} />,
+                      p: ({node, ...props}) => <p className="mb-4 leading-relaxed text-neutral-300" {...props} />,
+                      ul: ({node, ...props}) => <ul className="list-disc list-outside ml-5 space-y-2 mb-6" {...props} />,
+                      li: ({node, ...props}) => <li className="text-neutral-200 font-normal pl-1" {...props} />,
+                      strong: ({node, ...props}) => <strong className="font-bold text-[#C6FF00]" {...props} />
+                    }}
+                  >
+                    {explanationText}
+                  </ReactMarkdown>
+                </div>
+
+                {latencyMetrics && !isStreaming && (
+                  <div className="mt-8 pt-4 border-t border-slate-800 flex items-center justify-between font-mono text-[10px] text-slate-400 uppercase tracking-wider">
+                    <span>
+                      TTFB: {latencyMetrics.ttfbMs}ms
+                    </span>
+                    <span className="text-[#C6FF00] font-bold">
+                      EXPERT ANALYSIS COMPLETED
+                    </span>
+                  </div>
+                )}
+
+                {!isStreaming && explanationText && (
+                  <motion.div 
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.4, delay: 0.1 }}
+                    className="mt-8 pt-6 border-t border-slate-800"
+                  >
+                    <div className="font-mono text-xs font-bold text-[#C6FF00] uppercase tracking-widest mb-4 flex items-center gap-2">
+                      <Terminal className="w-4 h-4 text-[#C6FF00]" />
+                      <span>GO DEEPER — RESEARCH PIPELINE</span>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-3">
+                      <a
+                        href={wikiUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center justify-between p-3.5 bg-neutral-900 border border-slate-700 text-neutral-200 hover:border-[#C6FF00] hover:text-[#C6FF00] hover:-translate-y-0.5 hover:shadow-md transition-all duration-200 group rounded-none"
+                      >
+                        <div className="flex items-center gap-2.5 min-w-0 pr-2">
+                          <BookOpen className="w-4 h-4 shrink-0 text-slate-400 group-hover:text-[#C6FF00]" />
+                          <span className="text-xs font-mono font-medium truncate">
+                            Wikipedia — {topic}
+                          </span>
+                        </div>
+                        <ExternalLink className="w-3.5 h-3.5 shrink-0 opacity-60 group-hover:opacity-100 transition-opacity" />
+                      </a>
+
+                      <a
+                        href={scholarUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center justify-between p-3.5 bg-neutral-900 border border-slate-700 text-neutral-200 hover:border-[#C6FF00] hover:text-[#C6FF00] hover:-translate-y-0.5 hover:shadow-md transition-all duration-200 group rounded-none"
+                      >
+                        <div className="flex items-center gap-2.5 min-w-0 pr-2">
+                          <GraduationCap className="w-4 h-4 shrink-0 text-slate-400 group-hover:text-[#C6FF00]" />
+                          <span className="text-xs font-mono font-medium truncate">
+                            Google Scholar
+                          </span>
+                        </div>
+                        <ExternalLink className="w-3.5 h-3.5 shrink-0 opacity-60 group-hover:opacity-100 transition-opacity" />
+                      </a>
+
+                      <a
+                        href={youtubeUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center justify-between p-3.5 bg-neutral-900 border border-slate-700 text-neutral-200 hover:border-[#C6FF00] hover:text-[#C6FF00] hover:-translate-y-0.5 hover:shadow-md transition-all duration-200 group rounded-none"
+                      >
+                        <div className="flex items-center gap-2.5 min-w-0 pr-2">
+                          <PlayCircle className="w-4 h-4 shrink-0 text-slate-400 group-hover:text-[#C6FF00]" />
+                          <span className="text-xs font-mono font-medium truncate">
+                            YouTube Deep-Dives
+                          </span>
+                        </div>
+                        <ExternalLink className="w-3.5 h-3.5 shrink-0 opacity-60 group-hover:opacity-100 transition-opacity" />
+                      </a>
+                    </div>
+
+                    <p className="font-mono text-[10px] text-slate-500 text-left">
+                      Links generated from your search topic — not verified for accuracy of external content.
+                    </p>
+                  </motion.div>
+                )}
+              </div>
             )}
           </motion.div>
         ) : (
