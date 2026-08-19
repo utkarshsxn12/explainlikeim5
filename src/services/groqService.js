@@ -8,6 +8,54 @@ const MODEL_CANDIDATES = [
   'groq/compound-mini'
 ];
 
+function sanitizeExplanation(raw) {
+  if (!raw) return '';
+
+  let text = raw;
+
+  if (text.includes('</think>')) {
+    text = text.split('</think>').pop();
+  }
+
+  text = text.replace(/<think>[\s\S]*?<\/think>/gi, '').replace(/<think>[\s\S]*/gi, '');
+
+  text = text.replace(/[\u{1F600}-\u{1F64F}\u{1F300}-\u{1F5FF}\u{1F680}-\u{1F6FF}\u{1F700}-\u{1F77F}\u{1F780}-\u{1F7FF}\u{1F800}-\u{1F8FF}\u{1F900}-\u{1F9FF}\u{1FA00}-\u{1FA6F}\u{1FA70}-\u{1FAFF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]/gu, '');
+
+  const lines = text.split('\n');
+  let inPlanningBlock = false;
+  const cleanLines = [];
+
+  for (const line of lines) {
+    const trimmed = line.trim();
+
+    if (
+      trimmed.startsWith('<think>') ||
+      trimmed.includes("Here's a thinking process") ||
+      /^-\s*(Analyze User Input|Topic:|Target Audience|Format Requirements|Required Structure|Tone\/Style|Constraints|Deconstruct|Format:|Count:|Length:|Vocabulary:|No jargon|Check Constraints|Only bullet|5-6 bullets|Each starts|Brainstorming Content)/i.test(trimmed) ||
+      /^(Analyze User Input|Target Audience|Format Requirements|Required Structure|Tone\/Style|Constraints|Deconstruct Constraints|Check Constraints):?$/i.test(trimmed)
+    ) {
+      inPlanningBlock = true;
+      continue;
+    }
+
+    if (
+      /^-\s*(Output ONLY|Structure:|No system rules|No extra text|Keep the|Provide exactly|Use simple|Zero technical|Each bullet|Clear, appropriate)/i.test(trimmed)
+    ) {
+      continue;
+    }
+
+    if (trimmed.startsWith('##') || /^-\s*"?[A-Z0-9]/.test(trimmed)) {
+      inPlanningBlock = false;
+    }
+
+    if (!inPlanningBlock) {
+      cleanLines.push(line);
+    }
+  }
+
+  return cleanLines.join('\n').trim();
+}
+
 export async function fetchExplanationStreaming(topic, levelKey = 'CHILD', onToken, onStart) {
   const apiKey = import.meta.env.VITE_GROQ_API_KEY;
   if (!apiKey) {
@@ -42,7 +90,7 @@ export async function fetchExplanationStreaming(topic, levelKey = 'CHILD', onTok
             { role: 'system', content: systemPrompt },
             { role: 'user', content: `Explain this topic clearly: "${topic}"` }
           ],
-          temperature: 0.4,
+          temperature: 0.3,
           max_tokens: 750,
           stream: true
         })
@@ -97,15 +145,10 @@ export async function fetchExplanationStreaming(topic, levelKey = 'CHILD', onTok
               firstTokenTime = performance.now();
             }
             rawText += deltaContent;
+            const cleanedText = sanitizeExplanation(rawText);
 
-            let cleanText = rawText;
-            if (cleanText.includes('</think>')) {
-              cleanText = cleanText.split('</think>').pop();
-            }
-            cleanText = cleanText.replace(/<think>[\s\S]*?<\/think>/gi, '').replace(/<think>[\s\S]*/gi, '').trim();
-
-            if (onToken && (cleanText || rawText)) {
-              onToken(deltaContent, cleanText || rawText);
+            if (onToken && (cleanedText || rawText)) {
+              onToken(deltaContent, cleanedText || rawText);
             }
           }
         } catch (e) {
@@ -114,11 +157,7 @@ export async function fetchExplanationStreaming(topic, levelKey = 'CHILD', onTok
     }
   }
 
-  let finalCleanText = rawText;
-  if (finalCleanText.includes('</think>')) {
-    finalCleanText = finalCleanText.split('</think>').pop();
-  }
-  finalCleanText = finalCleanText.replace(/<think>[\s\S]*?<\/think>/gi, '').replace(/<think>[\s\S]*/gi, '').trim();
+  const finalCleanText = sanitizeExplanation(rawText);
 
   const endTime = performance.now();
   const totalLatencyMs = Math.round(endTime - startTime);
@@ -154,7 +193,7 @@ export async function fetchExplanationNonStreaming(topic, levelKey = 'CHILD') {
         { role: 'system', content: systemPrompt },
         { role: 'user', content: `Explain this topic clearly: "${topic}"` }
       ],
-      temperature: 0.4,
+      temperature: 0.3,
       max_tokens: 700,
       stream: false
     })
@@ -167,8 +206,5 @@ export async function fetchExplanationNonStreaming(topic, levelKey = 'CHILD') {
 
   const data = await response.json();
   let rawText = data.choices[0]?.message?.content || '';
-  if (rawText.includes('</think>')) {
-    rawText = rawText.split('</think>').pop();
-  }
-  return rawText.trim();
+  return sanitizeExplanation(rawText);
 }

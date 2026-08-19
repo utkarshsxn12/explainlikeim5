@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import ReactMarkdown from 'react-markdown';
-import { Copy, Check, AlertCircle, RefreshCw, BookOpen, GraduationCap, PlayCircle, ExternalLink, Terminal, Loader2, Sparkles } from 'lucide-react';
+import remarkGfm from 'remark-gfm';
+import { Copy, Check, AlertCircle, RefreshCw, BookOpen, GraduationCap, PlayCircle, ExternalLink, Terminal, Loader2 } from 'lucide-react';
 import { COMPLEXITY_LEVELS } from '../utils/prompts';
 
 export function ExplanationCard({ 
@@ -70,7 +71,7 @@ export function ExplanationCard({
             {onRetry && (
               <button
                 onClick={onRetry}
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#1C1917] dark:bg-rose-600 hover:bg-[#2A2421] text-[#FAF6EE] font-mono text-xs font-bold uppercase tracking-wider transition-colors shadow-md"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#1C1917] dark:bg-rose-600 hover:bg-[#2A2421] text-[#FAF6EE] font-mono text-xs font-bold uppercase tracking-wider transition-colors shadow-md cursor-pointer"
               >
                 <RefreshCw className="w-4 h-4" />
                 <span>RETRY PIPELINE</span>
@@ -144,7 +145,7 @@ export function ExplanationCard({
 
                   <button
                     onClick={handleCopy}
-                    className="p-2 rounded-xl bg-[#FAF6EE] dark:bg-[#02122F]/60 border border-[#1C1917]/30 dark:border-[#8EA8C3]/40 hover:bg-[#1C1917] hover:text-[#FAF6EE] dark:hover:border-[#F0F4F8] text-[#1C1917] dark:text-[#F0F4F8] transition-colors"
+                    className="p-2 rounded-xl bg-[#FAF6EE] dark:bg-[#02122F]/60 border border-[#1C1917]/30 dark:border-[#8EA8C3]/40 hover:bg-[#1C1917] hover:text-[#FAF6EE] dark:hover:border-[#F0F4F8] text-[#1C1917] dark:text-[#F0F4F8] transition-colors cursor-pointer"
                     title="Copy explanation"
                   >
                     {copied ? <Check className="w-4 h-4 text-[#F0F4F8]" /> : <Copy className="w-4 h-4" />}
@@ -154,6 +155,7 @@ export function ExplanationCard({
 
               <div className={`relative text-base sm:text-lg text-[#1C1917] dark:text-[#F0F4F8] leading-relaxed font-medium ${isStreaming ? 'typing-cursor' : ''}`}>
                 <ReactMarkdown
+                  remarkPlugins={[remarkGfm]}
                   components={{
                     h2: ({node, ...props}) => <h2 className="font-serif italic font-bold text-2xl sm:text-3xl text-[#1C1917] dark:text-[#F0F4F8] mt-8 mb-4 border-b border-[#1C1917]/20 dark:border-[#8EA8C3]/20 pb-2" {...props} />,
                     h3: ({node, ...props}) => <h3 className="font-sans font-bold text-lg sm:text-xl text-[#44403C] dark:text-white mt-6 mb-3" {...props} />,
@@ -172,7 +174,16 @@ export function ExplanationCard({
                       </motion.li>
                     ),
                     strong: ({node, ...props}) => <strong className="font-extrabold text-[#1C1917] dark:text-[#F0F4F8]" {...props} />,
-                    code: ({node, ...props}) => <code className="px-1.5 py-0.5 bg-[#1C1917]/10 dark:bg-[#02122F] border border-[#1C1917]/30 dark:border-[#8EA8C3]/40 text-[#1C1917] dark:text-[#F0F4F8] font-mono text-xs font-bold" {...props} />
+                    code: ({node, ...props}) => <code className="px-1.5 py-0.5 bg-[#1C1917]/10 dark:bg-[#02122F] border border-[#1C1917]/30 dark:border-[#8EA8C3]/40 text-[#1C1917] dark:text-[#F0F4F8] font-mono text-xs font-bold" {...props} />,
+                    table: ({node, ...props}) => (
+                      <div className="overflow-x-auto my-6 rounded-xl border border-[#1C1917]/30 dark:border-[#8EA8C3]/30">
+                        <table className="w-full text-left font-sans text-sm" {...props} />
+                      </div>
+                    ),
+                    thead: ({node, ...props}) => <thead className="bg-[#1C1917] text-[#FAF6EE] dark:bg-[#F0F4F8] dark:text-[#02122F] font-mono text-xs font-bold uppercase tracking-wider" {...props} />,
+                    th: ({node, ...props}) => <th className="p-3 border-b border-[#1C1917]/20 dark:border-[#8EA8C3]/20" {...props} />,
+                    td: ({node, ...props}) => <td className="p-3 border-b border-[#1C1917]/10 dark:border-[#8EA8C3]/10 font-medium" {...props} />,
+                    tr: ({node, ...props}) => <tr className="even:bg-[#1C1917]/5 dark:even:bg-[#02122F]/40" {...props} />
                   }}
                 >
                   {explanationText}
