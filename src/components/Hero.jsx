@@ -88,7 +88,7 @@ export function Hero({ topic, setTopic, onSubmit, isLoading, activeTopic, select
       <motion.p 
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
-        className="font-mono text-xs text-[#44403C] dark:text-sky-400 uppercase tracking-widest mb-8 text-center font-bold"
+        className="font-mono text-xs text-[#44403C] dark:text-[#8EA8C3] uppercase tracking-widest mb-8 text-center font-bold"
       >
         FOR ALL THE COMPLEX STUFF YOU NODDED ALONG TO BUT HAD ZERO CLUE ABOUT.
       </motion.p>
@@ -97,16 +97,16 @@ export function Hero({ topic, setTopic, onSubmit, isLoading, activeTopic, select
         initial={{ opacity: 0, y: 15 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.1 }}
-        className="font-serif italic text-4xl sm:text-6xl md:text-7xl tracking-tight text-[#1C1917] dark:text-white leading-[1.15] mb-6 text-center w-full"
+        className="font-serif italic text-4xl sm:text-6xl md:text-7xl tracking-tight text-[#1C1917] dark:text-[#F0F4F8] leading-[1.15] mb-6 text-center w-full"
       >
-        <div className="text-[#1C1917] dark:text-white block min-h-[1.25em] mb-1 font-serif">
+        <div className="text-[#1C1917] dark:text-[#F0F4F8] block min-h-[1.25em] mb-1 font-serif">
           <span>{activeTopic ? formattedActiveTopic : currentText}</span>
           {!activeTopic && (
-            <span className="inline-block w-1 sm:w-1.5 h-[0.8em] bg-[#1C1917] dark:bg-[#38BDF8] ml-1.5 animate-pulse align-middle"></span>
+            <span className="inline-block w-1 sm:w-1.5 h-[0.8em] bg-[#1C1917] dark:bg-[#F0F4F8] ml-1.5 animate-pulse align-middle"></span>
           )}
         </div>
 
-        <div className="not-italic font-sans font-bold text-3xl sm:text-5xl md:text-6xl uppercase tracking-tight block text-[#1C1917] dark:text-[#38BDF8]">
+        <div className="not-italic font-sans font-bold text-3xl sm:text-5xl md:text-6xl uppercase tracking-tight block text-[#1C1917] dark:text-[#F0F4F8]">
           {selectedLevel === 'CHILD' && "Explained like you're 5."}
           {selectedLevel === 'TEEN' && "Explained like you're 15."}
           {selectedLevel === 'EXPERT' && "Explained for an Expert."}
@@ -121,12 +121,12 @@ export function Hero({ topic, setTopic, onSubmit, isLoading, activeTopic, select
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -5 }}
             transition={{ duration: 0.4 }}
-            className="text-base sm:text-lg text-[#44403C] dark:text-slate-300 max-w-2xl font-medium text-center leading-relaxed"
+            className="text-base sm:text-lg text-[#44403C] dark:text-[#B8C5D6] max-w-2xl font-medium text-center leading-relaxed"
           >
             {activeSubtext.isSpecial ? (
               <span>
                 That thing you nodded along to but{' '}
-                <span className="text-[#1C1917] dark:text-[#38BDF8] font-extrabold underline underline-offset-4 decoration-[#1C1917]/50 dark:decoration-[#38BDF8]/50">
+                <span className="text-[#1C1917] dark:text-[#F0F4F8] font-extrabold underline underline-offset-4 decoration-[#1C1917]/50 dark:decoration-[#F0F4F8]/50">
                   never understood
                 </span>
                 ? Type it here.
@@ -147,11 +147,11 @@ export function Hero({ topic, setTopic, onSubmit, isLoading, activeTopic, select
           className="w-full relative"
         >
           <div 
-            className={`relative flex items-center bg-[#E8E0D5]/70 dark:bg-slate-900/90 border-2 border-[#1C1917] dark:border-sky-800/80 rounded-2xl p-2 transition-all duration-300 shadow-md ${
-              isFocused ? 'ring-2 ring-[#1C1917] dark:ring-[#38BDF8]' : ''
+            className={`relative flex items-center bg-[#E8E0D5]/70 dark:bg-[#23354D]/80 border-2 border-[#1C1917] dark:border-[#8EA8C3]/50 rounded-2xl p-2 transition-all duration-300 shadow-md ${
+              isFocused ? 'ring-2 ring-[#1C1917] dark:ring-[#F0F4F8]' : ''
             }`}
           >
-            <div className="pl-3 pr-2 text-[#1C1917] dark:text-sky-400">
+            <div className="pl-3 pr-2 text-[#1C1917] dark:text-[#8EA8C3]">
               <Search className="w-5 h-5" />
             </div>
 
@@ -162,7 +162,7 @@ export function Hero({ topic, setTopic, onSubmit, isLoading, activeTopic, select
               onFocus={() => setIsFocused(true)}
               onBlur={() => setIsFocused(false)}
               placeholder="Ask me literally anything..."
-              className="w-full bg-transparent text-[#1C1917] dark:text-white placeholder-[#44403C]/70 dark:placeholder-slate-400 text-sm sm:text-base font-sans font-medium focus:outline-none py-2 px-1"
+              className="w-full bg-transparent text-[#1C1917] dark:text-[#F0F4F8] placeholder-[#44403C]/70 dark:placeholder-[#8EA8C3]/60 text-sm sm:text-base font-sans font-medium focus:outline-none py-2 px-1"
               disabled={isLoading}
             />
 
@@ -171,13 +171,13 @@ export function Hero({ topic, setTopic, onSubmit, isLoading, activeTopic, select
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
               disabled={!topic.trim() || isLoading}
-              className={`flex items-center gap-2 px-6 py-3 rounded-xl font-mono font-bold text-xs uppercase tracking-wider text-[#FAF6EE] dark:text-slate-950 bg-[#1C1917] dark:bg-[#38BDF8] hover:bg-[#2A2421] dark:hover:bg-[#0EA5E9] transition-all duration-200 shadow-md ${
+              className={`flex items-center gap-2 px-6 py-3 rounded-xl font-mono font-bold text-xs uppercase tracking-wider text-[#FAF6EE] dark:text-[#02122F] bg-[#1C1917] dark:bg-[#F0F4F8] hover:bg-[#2A2421] dark:hover:bg-[#E2E8F0] transition-all duration-200 shadow-md ${
                 !topic.trim() || isLoading ? 'opacity-60 cursor-not-allowed' : ''
               }`}
             >
               {isLoading ? (
                 <div className="flex items-center gap-2">
-                  <div className="w-3.5 h-3.5 border-2 border-white dark:border-slate-950 border-t-transparent rounded-full animate-spin"></div>
+                  <div className="w-3.5 h-3.5 border-2 border-white dark:border-[#02122F] border-t-transparent rounded-full animate-spin"></div>
                   <span>WAIT</span>
                 </div>
               ) : (

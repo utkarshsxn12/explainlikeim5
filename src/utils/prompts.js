@@ -6,11 +6,11 @@ export const COMPLEXITY_LEVELS = {
     code: 'CHILD',
     badge: 'KINDERGARTEN PLAYGROUND EDITION',
     accentLight: '#4A2E1B',
-    accentDark: '#38BDF8',
+    accentDark: '#F0F4F8',
     themeGlowLight: 'bg-amber-500/10',
-    themeGlowDark: 'bg-sky-500/15',
+    themeGlowDark: 'bg-[#23354D]/30',
     cardBorderLight: 'border-amber-300',
-    cardBorderDark: 'border-sky-800/60',
+    cardBorderDark: 'border-[#23354D]',
     description: 'Only 5-6 short bullet points, playground analogies, zero jargon',
     systemPrompt: `You are explaining a topic to a 5-year-old child.
 Follow these formatting and content rules strictly:
@@ -28,11 +28,11 @@ Follow these formatting and content rules strictly:
     code: 'TEEN',
     badge: 'HIGH SCHOOL CYBER EDITION',
     accentLight: '#1C1917',
-    accentDark: '#38BDF8',
+    accentDark: '#F0F4F8',
     themeGlowLight: 'bg-neutral-500/10',
-    themeGlowDark: 'bg-sky-500/15',
+    themeGlowDark: 'bg-[#23354D]/30',
     cardBorderLight: 'border-neutral-300',
-    cardBorderDark: 'border-sky-800/60',
+    cardBorderDark: 'border-[#23354D]',
     description: 'Structured with ## headings, subheadings, and relatable analogies',
     systemPrompt: `You are explaining a topic to a 15-year-old high school student.
 Follow these formatting and content rules strictly:
@@ -49,11 +49,11 @@ Follow these formatting and content rules strictly:
     code: 'EXPERT',
     badge: 'DOMAIN EXPERT EDITION',
     accentLight: '#1C1917',
-    accentDark: '#38BDF8',
+    accentDark: '#F0F4F8',
     themeGlowLight: 'bg-stone-500/10',
-    themeGlowDark: 'bg-sky-500/15',
+    themeGlowDark: 'bg-[#23354D]/30',
     cardBorderLight: 'border-stone-300',
-    cardBorderDark: 'border-sky-800/60',
+    cardBorderDark: 'border-[#23354D]',
     description: 'Rigorous 4-section breakdown with technical depth (250-350 words)',
     systemPrompt: `You are providing a domain-expert technical explanation for a peer professional.
 Follow these formatting and content rules strictly:

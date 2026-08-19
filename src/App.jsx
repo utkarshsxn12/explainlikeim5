@@ -21,9 +21,7 @@ export default function App() {
   const [recentTopics, setRecentTopics] = useState(['Blockchain', 'Quantum Computing', 'Black Holes']);
   const [sessionCount, setSessionCount] = useState(0);
   const [showEasterEgg, setShowEasterEgg] = useState(false);
-  const [isDarkMode, setIsDarkMode] = useState(() => {
-    return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-  });
+  const [isDarkMode, setIsDarkMode] = useState(false);
 
   const modeConfig = COMPLEXITY_LEVELS[selectedLevel] || COMPLEXITY_LEVELS.CHILD;
 
@@ -89,8 +87,8 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#FAF6EE] dark:bg-[#0A0E17] text-[#1C1917] dark:text-slate-100 flex flex-col transition-colors duration-300 relative overflow-hidden font-sans bg-grain">
-      <div className="absolute top-12 left-1/2 -translate-x-1/2 w-[600px] h-[350px] bg-amber-500/10 dark:bg-sky-500/15 rounded-full blur-[120px] pointer-events-none"></div>
+    <div className="min-h-screen bg-[#FAF6EE] dark:bg-[#02122F] text-[#1C1917] dark:text-[#F0F4F8] flex flex-col transition-colors duration-300 relative overflow-hidden font-sans bg-grain">
+      <div className="absolute top-12 left-1/2 -translate-x-1/2 w-[600px] h-[350px] bg-amber-500/10 dark:bg-[#23354D]/30 rounded-full blur-[120px] pointer-events-none"></div>
 
       <Navbar 
         isDarkMode={isDarkMode} 
@@ -110,7 +108,7 @@ export default function App() {
 
         <WorkflowSection />
 
-        <div className="w-full max-w-3xl border-t border-[#1C1917]/20 dark:border-sky-900/40 my-2"></div>
+        <div className="w-full max-w-3xl border-t border-[#1C1917]/20 dark:border-[#8EA8C3]/30 my-2"></div>
 
         <ComplexitySlider 
           selectedLevel={selectedLevel} 
@@ -127,7 +125,7 @@ export default function App() {
           onSelectTopic={(t) => handleRunExplanation(t, selectedLevel)} 
         />
 
-        <div className="w-full max-w-3xl border-t border-[#1C1917]/20 dark:border-sky-900/40 my-2"></div>
+        <div className="w-full max-w-3xl border-t border-[#1C1917]/20 dark:border-[#8EA8C3]/30 my-2"></div>
 
         <ExplanationCard 
           topic={activeTopic}
@@ -141,10 +139,10 @@ export default function App() {
         />
       </main>
 
-      <footer className="w-full border-t border-[#1C1917]/20 dark:border-sky-900/40 py-6 text-center text-xs font-mono text-[#44403C] dark:text-sky-400 relative z-10">
+      <footer className="w-full border-t border-[#1C1917]/20 dark:border-[#8EA8C3]/30 py-6 text-center text-xs font-mono text-[#44403C] dark:text-[#8EA8C3] relative z-10">
         <div className="max-w-5xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-2 uppercase tracking-wider font-bold">
           <span>ELI5 — REAL-TIME INFERENCE PIPELINE ⚡</span>
-          <span className="text-[#1C1917] dark:text-[#38BDF8] font-extrabold">
+          <span className="text-[#1C1917] dark:text-[#F0F4F8] font-extrabold">
             [{modeConfig.code}] {modeConfig.shortLabel.toUpperCase()} MODE ACTIVE
           </span>
         </div>
