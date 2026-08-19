@@ -15,20 +15,27 @@ function sanitizeExplanation(raw) {
 
   if (text.includes('</think>')) {
     text = text.split('</think>').pop();
+  } else if (text.includes('<think>')) {
+    return '';
   }
 
-  text = text.replace(/<think>[\s\S]*?<\/think>/gi, '').replace(/<think>[\s\S]*/gi, '');
-
-  text = text.replace(/^[\s\S]*?Here's a thinking process:[\s\S]*?(?=Brainstorming Content|\n- "[A-Z]|\n- [A-Z][a-z]+ is|\n- It's|\n- You can|\n- Saying|\n##)/i, '');
+  if (text.includes("Here's a thinking process:")) {
+    const headingIndex = text.search(/\n##\s+|\n-\s+/);
+    if (headingIndex !== -1) {
+      text = text.slice(headingIndex);
+    } else {
+      return '';
+    }
+  }
 
   const lines = text.split('\n');
   const cleanLines = lines.filter(line => {
     const trimmed = line.trim();
     if (!trimmed) return true;
-    if (trimmed.startsWith('<think>')) return false;
+    if (trimmed.startsWith('<think>') || trimmed.startsWith('</think>')) return false;
     if (trimmed.includes("Here's a thinking process")) return false;
-    if (/^-\s*(Analyze|Topic:|Target Audience|Constraints|Deconstruct|Format:|Count:|Length:|Vocabulary:|No jargon|Check Constraints|Only bullet|5-6 bullets|Each starts|Brainstorming Content)/i.test(trimmed)) return false;
-    if (/^(Analyze User Input|Target Audience|Constraints|Deconstruct Constraints|Check Constraints):?$/i.test(trimmed)) return false;
+    if (/^-\s*(Analyze|Topic:|Target Audience|Critical Instruction|Required Structure|Constraints|Deconstruct|Format:|Count:|Length:|Vocabulary:|No jargon|Check Constraints|Only bullet|5-6 bullets|Each starts|Brainstorming Content)/i.test(trimmed)) return false;
+    if (/^(Analyze User Input|Target Audience|Critical Instruction|Required Structure|Constraints|Deconstruct Constraints|Check Constraints):?$/i.test(trimmed)) return false;
     return true;
   });
 
