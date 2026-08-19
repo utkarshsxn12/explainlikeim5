@@ -15,24 +15,24 @@ function sanitizeExplanation(raw) {
 
   if (text.includes('</think>')) {
     text = text.split('</think>').pop();
-  } else if (text.includes('<think>')) {
-    text = text.replace(/<think>[\s\S]*?<\/think>/gi, '').replace(/<think>[\s\S]*/gi, '');
   }
 
-  const metaPatterns = [
-    /^\s*Target Audience:[\s\S]*?(?=##|- |\n\n)/i,
-    /^\s*Formatting Rules:[\s\S]*?(?=##|- |\n\n)/i,
-    /^\s*Content Rules:[\s\S]*?(?=##|- |\n\n)/i,
-    /^\s*Deconstruct Requirements[\s\S]*?(?=##|- |\n\n)/i,
-    /^\s*Here's a thinking process:[\s\S]*?(?=##|- |\n\n)/i,
-    /^\s*System Prompt:[\s\S]*?(?=##|- |\n\n)/i
-  ];
+  text = text.replace(/<think>[\s\S]*?<\/think>/gi, '').replace(/<think>[\s\S]*/gi, '');
 
-  metaPatterns.forEach(pattern => {
-    text = text.replace(pattern, '');
+  text = text.replace(/^[\s\S]*?Here's a thinking process:[\s\S]*?(?=Brainstorming Content|\n- "[A-Z]|\n- [A-Z][a-z]+ is|\n- It's|\n- You can|\n- Saying|\n##)/i, '');
+
+  const lines = text.split('\n');
+  const cleanLines = lines.filter(line => {
+    const trimmed = line.trim();
+    if (!trimmed) return true;
+    if (trimmed.startsWith('<think>')) return false;
+    if (trimmed.includes("Here's a thinking process")) return false;
+    if (/^-\s*(Analyze|Topic:|Target Audience|Constraints|Deconstruct|Format:|Count:|Length:|Vocabulary:|No jargon|Check Constraints|Only bullet|5-6 bullets|Each starts|Brainstorming Content)/i.test(trimmed)) return false;
+    if (/^(Analyze User Input|Target Audience|Constraints|Deconstruct Constraints|Check Constraints):?$/i.test(trimmed)) return false;
+    return true;
   });
 
-  return text.trim();
+  return cleanLines.join('\n').trim();
 }
 
 export async function fetchExplanationStreaming(topic, levelKey = 'CHILD', onToken, onStart) {
@@ -69,7 +69,7 @@ export async function fetchExplanationStreaming(topic, levelKey = 'CHILD', onTok
             { role: 'system', content: systemPrompt },
             { role: 'user', content: `Explain this topic clearly: "${topic}"` }
           ],
-          temperature: 0.4,
+          temperature: 0.3,
           max_tokens: 750,
           stream: true
         })
@@ -176,7 +176,7 @@ export async function fetchExplanationNonStreaming(topic, levelKey = 'CHILD') {
         { role: 'system', content: systemPrompt },
         { role: 'user', content: `Explain this topic clearly: "${topic}"` }
       ],
-      temperature: 0.4,
+      temperature: 0.3,
       max_tokens: 700,
       stream: false
     })
