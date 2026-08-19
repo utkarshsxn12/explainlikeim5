@@ -1,8 +1,12 @@
 import { COMPLEXITY_LEVELS, EASTER_EGG_PROMPT } from '../utils/prompts';
 
 const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
-const PRIMARY_MODEL = 'llama-3.3-70b-versatile';
-const FALLBACK_MODEL = 'llama-3.1-8b-instant';
+const MODEL_CANDIDATES = [
+  'groq/compound-mini',
+  'groq/compound',
+  'qwen/qwen3.6-27b',
+  'openai/gpt-oss-20b'
+];
 
 export async function fetchExplanationStreaming(topic, levelKey = 'CHILD', onToken, onStart) {
   const apiKey = import.meta.env.VITE_GROQ_API_KEY;
@@ -17,35 +21,43 @@ export async function fetchExplanationStreaming(topic, levelKey = 'CHILD', onTok
   const startTime = performance.now();
   let firstTokenTime = null;
 
-  const makeRequest = async (modelName) => {
-    return fetch(GROQ_API_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${apiKey}`
-      },
-      body: JSON.stringify({
-        model: modelName,
-        messages: [
-          { role: 'system', content: systemPrompt },
-          { role: 'user', content: `Explain this topic clearly: "${topic}"` }
-        ],
-        temperature: 0.6,
-        max_tokens: 450,
-        stream: true
-      })
-    });
-  };
+  let response = null;
+  let lastErrorMsg = '';
 
-  let response = await makeRequest(PRIMARY_MODEL);
+  for (const modelName of MODEL_CANDIDATES) {
+    try {
+      const res = await fetch(GROQ_API_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${apiKey}`
+        },
+        body: JSON.stringify({
+          model: modelName,
+          messages: [
+            { role: 'system', content: systemPrompt },
+            { role: 'user', content: `Explain this topic clearly: "${topic}"` }
+          ],
+          temperature: 0.6,
+          max_tokens: 450,
+          stream: true
+        })
+      });
 
-  if (!response.ok && (response.status === 404 || response.status === 400)) {
-    response = await makeRequest(FALLBACK_MODEL);
+      if (res.ok) {
+        response = res;
+        break;
+      } else {
+        const errorData = await res.json().catch(() => ({}));
+        lastErrorMsg = errorData.error?.message || `Groq API Error (${res.status})`;
+      }
+    } catch (err) {
+      lastErrorMsg = err.message;
+    }
   }
 
-  if (!response.ok) {
-    const errorData = await response.json().catch(() => ({}));
-    throw new Error(errorData.error?.message || `Groq API Error (${response.status})`);
+  if (!response || !response.ok) {
+    throw new Error(lastErrorMsg || 'Groq API request failed across available models.');
   }
 
   if (onStart) onStart();
@@ -117,7 +129,7 @@ export async function fetchExplanationNonStreaming(topic, levelKey = 'CHILD') {
       'Authorization': `Bearer ${apiKey}`
     },
     body: JSON.stringify({
-      model: PRIMARY_MODEL,
+      model: MODEL_CANDIDATES[0],
       messages: [
         { role: 'system', content: systemPrompt },
         { role: 'user', content: `Explain this topic clearly: "${topic}"` }
