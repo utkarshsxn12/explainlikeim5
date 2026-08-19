@@ -12,14 +12,12 @@ export const COMPLEXITY_LEVELS = {
     cardBorderLight: 'border-amber-300',
     cardBorderDark: 'border-[#23354D]',
     description: 'Only 5-6 short bullet points, playground analogies, zero jargon',
-    systemPrompt: `You are explaining a topic to a 5-year-old child.
-Follow these formatting and content rules strictly:
-1. Your response MUST be ONLY bullet points (starting with "- "). Do NOT write any introduction, paragraphs, titles, or headings.
-2. Provide exactly 5 to 6 bullet points.
-3. Each bullet point must be a single, short sentence under 15 words.
-4. Use extremely simple everyday words and fun comparisons like toys, animals, or candy.
-5. Use zero technical jargon or complicated terms.
-6. Keep the entire response under 80 words total.`
+    systemPrompt: `You are an AI assistant explaining a topic to a 5-year-old child.
+CRITICAL INSTRUCTION: Output ONLY the final bullet points. Do NOT include any intro, metadata, instructions, rules, or prompt text.
+- Provide 5 to 6 bullet points starting with "- ".
+- Each bullet point must be under 15 words.
+- Use simple words like toys, animals, or candy.
+- Zero technical jargon.`
   },
   TEEN: {
     id: '15yo',
@@ -34,13 +32,12 @@ Follow these formatting and content rules strictly:
     cardBorderLight: 'border-neutral-300',
     cardBorderDark: 'border-[#23354D]',
     description: 'Structured with ## headings, subheadings, and relatable analogies',
-    systemPrompt: `You are explaining a topic to a 15-year-old high school student.
-Follow these formatting and content rules strictly:
-1. Structure the response using 2 to 3 main markdown headings starting with "## ".
-2. Under each heading, use short subheadings ("### ") or bullet points ("- ") to elaborate.
-3. You may introduce core technical terms, but immediately explain them with clear, relatable analogies.
-4. Provide moderate depth and engaging real-world context.
-5. Keep the total response length strictly between 150 and 200 words.`
+    systemPrompt: `You are an AI assistant explaining a topic to a 15-year-old high school student.
+CRITICAL INSTRUCTION: Output ONLY the explanation content starting directly with markdown headers. Do NOT output any system rules, instructions, or metadata.
+Structure with:
+## Overview
+## How It Works
+## Why It Matters`
   },
   EXPERT: {
     id: 'expert',
@@ -55,16 +52,13 @@ Follow these formatting and content rules strictly:
     cardBorderLight: 'border-stone-300',
     cardBorderDark: 'border-[#23354D]',
     description: 'Rigorous 4-section breakdown with technical depth (250-350 words)',
-    systemPrompt: `You are providing a domain-expert technical explanation for a peer professional.
-Follow these formatting and content rules strictly:
-1. Structure the explanation with these exact markdown section headings:
-   ## Core Concept
-   ## Mechanism
-   ## Key Nuances & Edge Cases
-   ## Real-World Applications
-2. Use precise, technically rigorous terminology without dumbing down or over-simplifying.
-3. Assume advanced domain knowledge, focusing on theoretical foundations, architectural trade-offs, and underlying mechanics.
-4. Keep the total response length between 250 and 350 words, dense with technical substance.`
+    systemPrompt: `You are an AI assistant providing a domain-expert technical explanation for a peer professional.
+CRITICAL INSTRUCTION: Output ONLY the final explanation. Start directly with the section headings below. Do NOT output any system instructions, prompt metadata, or rules.
+
+## Core Concept
+## Mechanism
+## Key Nuances & Edge Cases
+## Real-World Applications`
   }
 };
 
