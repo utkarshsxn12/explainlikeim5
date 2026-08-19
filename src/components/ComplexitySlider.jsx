@@ -13,10 +13,10 @@ export function ComplexitySlider({ selectedLevel, onSelectLevel }) {
 
   return (
     <div className="w-full max-w-3xl mr-auto pl-0 sm:pl-4 pr-0 sm:pr-12 my-6">
-      <div className="flex items-center justify-between mb-2 font-mono text-xs uppercase tracking-wider text-slate-500 dark:text-neutral-400">
-        <span>Target Mode Personality</span>
-        <span className="font-bold" style={{ color: currentConfig.accentColor }}>
-          [{currentConfig.code}] {currentConfig.badge}
+      <div className="flex items-center justify-between mb-2.5 font-mono text-xs uppercase tracking-wider text-slate-500 dark:text-neutral-400">
+        <span>Target Mode</span>
+        <span className="font-bold tracking-widest" style={{ color: currentConfig.accentColor }}>
+          [{currentConfig.code}] MODE ACTIVE
         </span>
       </div>
 
@@ -28,19 +28,24 @@ export function ComplexitySlider({ selectedLevel, onSelectLevel }) {
               key={key}
               type="button"
               onClick={() => onSelectLevel(key)}
-              className={`relative z-10 flex-1 flex items-center justify-center gap-2 py-3 px-2 font-mono text-xs font-bold uppercase transition-all duration-300 ${
+              className={`relative z-10 flex-1 flex items-center justify-center gap-2 py-3 px-2 font-mono text-xs font-bold uppercase transition-colors duration-200 ${
                 isSelected 
                   ? 'text-slate-950 font-black' 
                   : 'text-slate-600 dark:text-neutral-400 hover:text-slate-900 dark:hover:text-white'
               }`}
             >
-              <span>{data.label}</span>
+              <motion.span
+                animate={{ scale: isSelected ? 1.05 : 1 }}
+                transition={{ duration: 0.2 }}
+              >
+                {data.label}
+              </motion.span>
 
               {isSelected && (
                 <motion.div
                   layoutId="sliderIndicator"
                   className={`absolute inset-0 ${activeBg} shadow-md`}
-                  transition={{ type: 'spring', stiffness: 450, damping: 35 }}
+                  transition={{ type: 'spring', stiffness: 500, damping: 30 }}
                 />
               )}
             </button>
@@ -50,8 +55,9 @@ export function ComplexitySlider({ selectedLevel, onSelectLevel }) {
 
       <motion.p 
         key={selectedLevel}
-        initial={{ opacity: 0, y: 3 }}
-        animate={{ opacity: 1, y: 0 }}
+        initial={{ opacity: 0, x: -5 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.3 }}
         className="text-xs text-slate-500 dark:text-neutral-400 mt-2.5 font-sans italic flex items-center gap-2"
       >
         <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: currentConfig.accentColor }}></span>

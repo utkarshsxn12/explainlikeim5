@@ -1,10 +1,10 @@
 export const COMPLEXITY_LEVELS = {
   CHILD: {
     id: '5yo',
-    label: "05 / Child 🧒",
+    label: "05 / CHILD",
     shortLabel: '5yo',
     code: '05',
-    badge: '🧒 KINDERGARTEN PLAYGROUND MODE',
+    badge: '05 / KINDERGARTEN PLAYGROUND EDITION',
     accentColor: '#FF6B8B',
     themeGlow: 'bg-rose-500/15 dark:bg-rose-500/10',
     cardBorder: 'border-rose-400/60 dark:border-rose-500/40',
@@ -23,10 +23,10 @@ Follow these formatting and content rules strictly:
   },
   TEEN: {
     id: '15yo',
-    label: "15 / Teen 🧑",
+    label: "15 / TEEN",
     shortLabel: '15yo',
     code: '15',
-    badge: '🧑 HIGH SCHOOL CYBER EDITION',
+    badge: '15 / HIGH SCHOOL CYBER EDITION',
     accentColor: '#00E5FF',
     themeGlow: 'bg-cyan-500/15 dark:bg-cyan-500/10',
     cardBorder: 'border-cyan-400/60 dark:border-cyan-500/40',
@@ -44,10 +44,10 @@ Follow these formatting and content rules strictly:
   },
   EXPERT: {
     id: 'expert',
-    label: "EXP / Expert 🎓",
+    label: "EXP / EXPERT",
     shortLabel: 'Expert',
     code: 'EXP',
-    badge: '🎓 DOMAIN EXPERT TERMINAL',
+    badge: 'EXP / DOMAIN EXPERT TERMINAL',
     accentColor: '#C6FF00',
     themeGlow: 'bg-lime-500/15 dark:bg-[#C6FF00]/10',
     cardBorder: 'border-lime-400/60 dark:border-lime-500/40',

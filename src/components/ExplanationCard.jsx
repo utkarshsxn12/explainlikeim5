@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import ReactMarkdown from 'react-markdown';
-import { Copy, Check, AlertCircle, RefreshCw, BookOpen, GraduationCap, PlayCircle, ExternalLink, Sparkles, Terminal, ShieldAlert } from 'lucide-react';
+import { Copy, Check, AlertCircle, RefreshCw, BookOpen, GraduationCap, PlayCircle, ExternalLink, Terminal, Sparkles } from 'lucide-react';
 import { COMPLEXITY_LEVELS } from '../utils/prompts';
 
 export function ExplanationCard({ 
@@ -35,9 +35,10 @@ export function ExplanationCard({
         {error ? (
           <motion.div
             key="error"
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -15 }}
+            initial={{ opacity: 0, scale: 0.95, y: 15 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95, y: -15 }}
+            transition={{ type: 'spring', stiffness: 350, damping: 25 }}
             className="p-6 rounded-2xl bg-rose-50 dark:bg-[#180A0A] border-2 border-rose-300 dark:border-rose-900/80 text-rose-900 dark:text-rose-200 text-left shadow-2xl"
           >
             <div className="flex items-center gap-3 mb-3 text-rose-600 dark:text-rose-400 font-mono text-xs font-bold uppercase tracking-wider">
@@ -63,10 +64,11 @@ export function ExplanationCard({
         ) : isLoading && !explanationText ? (
           <motion.div
             key="skeleton"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className={`p-8 shadow-xl relative overflow-hidden transition-all duration-300 ${
+            initial={{ opacity: 0, scale: 0.96 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.96 }}
+            transition={{ duration: 0.3 }}
+            className={`p-8 shadow-xl relative overflow-hidden ${
               levelKey === 'CHILD' 
                 ? 'rounded-3xl bg-rose-50/90 dark:bg-rose-950/30 border-2 border-rose-300 dark:border-rose-800' 
                 : levelKey === 'TEEN' 
@@ -87,40 +89,34 @@ export function ExplanationCard({
             </div>
 
             <div className="space-y-3">
-              <div className="h-4 bg-slate-200 dark:bg-neutral-800/80 rounded-lg w-full shimmer-bg"></div>
-              <div className="h-4 bg-slate-200 dark:bg-neutral-800/80 rounded-lg w-11/12 shimmer-bg"></div>
-              <div className="h-4 bg-slate-200 dark:bg-neutral-800/80 rounded-lg w-4/5 shimmer-bg"></div>
-              <div className="h-4 bg-slate-200 dark:bg-neutral-800/80 rounded-lg w-3/4 shimmer-bg"></div>
+              <div className="h-4 bg-slate-200 dark:bg-neutral-800/80 rounded-none w-full shimmer-bg"></div>
+              <div className="h-4 bg-slate-200 dark:bg-neutral-800/80 rounded-none w-11/12 shimmer-bg"></div>
+              <div className="h-4 bg-slate-200 dark:bg-neutral-800/80 rounded-none w-4/5 shimmer-bg"></div>
+              <div className="h-4 bg-slate-200 dark:bg-neutral-800/80 rounded-none w-3/4 shimmer-bg"></div>
             </div>
           </motion.div>
         ) : explanationText ? (
           <motion.div
-            key="result"
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
+            key={`card-${levelKey}`}
+            initial={{ opacity: 0, scale: 0.96, y: 15 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.96, y: -15 }}
+            transition={{ type: 'spring', stiffness: 350, damping: 28 }}
             className="w-full"
           >
             {levelKey === 'CHILD' && (
               <div className="relative p-6 sm:p-8 rounded-3xl bg-gradient-to-b from-rose-50/90 via-amber-50/50 to-white dark:from-rose-950/40 dark:via-slate-900/90 dark:to-slate-950 border-2 border-rose-300 dark:border-rose-800/80 shadow-2xl text-slate-900 dark:text-rose-50">
                 <div className="flex flex-wrap items-center justify-between gap-3 mb-6 border-b border-rose-200 dark:border-rose-900/50 pb-4">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-2xl bg-rose-400 text-white flex items-center justify-center text-xl font-bold shadow-md shadow-rose-400/30">
-                      🧒
-                    </div>
-                    <div>
-                      <span className="inline-block px-2.5 py-0.5 rounded-full bg-rose-200 dark:bg-rose-900/80 text-rose-800 dark:text-rose-200 font-bold text-[11px] uppercase tracking-wider mb-1">
-                        KINDERGARTEN PLAYGROUND EDITION
-                      </span>
-                      <h3 className="font-bold text-2xl text-slate-900 dark:text-white capitalize leading-none">
-                        {topic}
-                      </h3>
-                    </div>
+                    <span className="px-3 py-1 rounded-full bg-rose-200 dark:bg-rose-900/80 text-rose-800 dark:text-rose-200 font-mono font-bold text-xs uppercase tracking-wider">
+                      05 / KINDERGARTEN PLAYGROUND EDITION
+                    </span>
                   </div>
 
                   <div className="flex items-center gap-2">
                     {latencyMetrics && (
                       <span className="px-3 py-1 rounded-full bg-amber-100 dark:bg-amber-950/80 border border-amber-300 dark:border-amber-800 text-amber-800 dark:text-amber-300 font-bold text-xs">
-                        ⚡ {(latencyMetrics.latencyMs / 1000).toFixed(2)}s
+                        {(latencyMetrics.latencyMs / 1000).toFixed(2)}s LATENCY
                       </span>
                     )}
 
@@ -140,10 +136,16 @@ export function ExplanationCard({
                       p: ({node, ...props}) => <p className="mb-4 leading-relaxed text-slate-800 dark:text-rose-100" {...props} />,
                       ul: ({node, ...props}) => <ul className="space-y-3 mb-6" {...props} />,
                       li: ({node, ...props}) => (
-                        <li className="flex items-start gap-3 bg-white/80 dark:bg-rose-950/40 p-3.5 rounded-2xl border border-rose-200/80 dark:border-rose-900/40 shadow-xs" {...props}>
-                          <span className="text-xl">🎈</span>
+                        <motion.li 
+                          initial={{ opacity: 0, x: -10 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ duration: 0.3 }}
+                          className="flex items-start gap-3 bg-white/90 dark:bg-rose-950/40 p-4 rounded-2xl border border-rose-200/80 dark:border-rose-900/40 shadow-xs" 
+                          {...props}
+                        >
+                          <span className="w-2 h-2 rounded-full bg-rose-500 mt-2 shrink-0"></span>
                           <span className="font-semibold text-slate-800 dark:text-rose-100">{props.children}</span>
-                        </li>
+                        </motion.li>
                       ),
                       strong: ({node, ...props}) => <strong className="font-extrabold text-rose-600 dark:text-rose-300" {...props} />
                     }}
@@ -158,17 +160,9 @@ export function ExplanationCard({
               <div className="relative p-6 sm:p-8 rounded-xl bg-slate-900/95 dark:bg-[#0A0E17] border-2 border-cyan-500/60 shadow-[0_0_30px_rgba(0,229,255,0.15)] text-cyan-50">
                 <div className="flex flex-wrap items-center justify-between gap-3 mb-6 border-b border-cyan-800/60 pb-4">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-lg bg-[#00E5FF] text-slate-950 flex items-center justify-center text-xl font-bold shadow-lg shadow-cyan-500/20">
-                      🧑
-                    </div>
-                    <div>
-                      <span className="inline-block px-3 py-0.5 rounded-none bg-cyan-950 text-[#00E5FF] border border-cyan-800 font-mono text-[10px] uppercase tracking-widest mb-1">
-                        CYBER HIGH-SCHOOL EDITION v15
-                      </span>
-                      <h3 className="font-mono font-bold text-2xl text-white capitalize leading-none">
-                        {topic}
-                      </h3>
-                    </div>
+                    <span className="px-3 py-1 rounded-none bg-cyan-950 text-[#00E5FF] border border-cyan-800 font-mono text-xs font-bold uppercase tracking-widest">
+                      15 / HIGH SCHOOL CYBER EDITION
+                    </span>
                   </div>
 
                   <div className="flex items-center gap-2">
@@ -207,16 +201,11 @@ export function ExplanationCard({
 
             {levelKey === 'EXPERT' && (
               <div className="relative p-6 sm:p-8 rounded-md bg-[#0D1117] border border-slate-700/90 shadow-2xl text-neutral-200">
-                <div className="flex items-center justify-between bg-slate-900 px-4 py-2 border-b border-slate-800 -mx-6 sm:-mx-8 -mt-6 sm:-mt-8 mb-6 rounded-t-md">
-                  <div className="flex items-center gap-2">
-                    <span className="w-3 h-3 rounded-full bg-rose-500 inline-block"></span>
-                    <span className="w-3 h-3 rounded-full bg-amber-500 inline-block"></span>
-                    <span className="w-3 h-3 rounded-full bg-emerald-500 inline-block"></span>
-                    <span className="font-mono text-xs text-slate-400 ml-2">
-                      terminal://domain_expert_analysis.sh
-                    </span>
-                  </div>
-                  <span className="font-mono text-[10px] text-[#C6FF00] uppercase tracking-widest">
+                <div className="flex items-center justify-between bg-slate-900 px-4 py-2.5 border-b border-slate-800 -mx-6 sm:-mx-8 -mt-6 sm:-mt-8 mb-6 rounded-t-md">
+                  <span className="font-mono text-xs text-slate-400">
+                    terminal://domain_expert_analysis.sh
+                  </span>
+                  <span className="font-mono text-[10px] text-[#C6FF00] uppercase tracking-widest font-bold">
                     TELEMETRY ACTIVE
                   </span>
                 </div>
@@ -224,16 +213,8 @@ export function ExplanationCard({
                 <div className="flex flex-wrap items-center justify-between gap-3 mb-6 border-b border-slate-800 pb-4">
                   <div className="flex items-center gap-3">
                     <span className="px-3 py-1 font-mono text-xs font-bold bg-neutral-900 border border-slate-700 text-[#C6FF00]">
-                      GRADUATE / EXP
+                      EXP / DOMAIN EXPERT TERMINAL
                     </span>
-                    <div>
-                      <h3 className="font-serif italic font-bold text-3xl text-white capitalize leading-none mb-1">
-                        {topic}
-                      </h3>
-                      <p className="font-mono text-[10px] uppercase text-slate-400 tracking-wider">
-                        DOM: TECHNICAL_RIGOR_NODE
-                      </p>
-                    </div>
                   </div>
 
                   <div className="flex items-center gap-3">
