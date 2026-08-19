@@ -12,7 +12,7 @@ export function ComplexitySlider({ selectedLevel, onSelectLevel }) {
   const currentConfig = COMPLEXITY_LEVELS[selectedLevel] || COMPLEXITY_LEVELS.CHILD;
 
   return (
-    <div className="w-full max-w-3xl mr-auto pl-0 sm:pl-4 pr-0 sm:pr-12 my-6">
+    <div className="w-full max-w-3xl mx-auto my-6">
       <div className="flex items-center justify-between mb-2.5 font-mono text-xs uppercase tracking-wider text-[#44403C] dark:text-[#8EA8C3] font-bold">
         <span>Target Mode</span>
         <span className="font-bold tracking-widest text-[#1C1917] dark:text-[#F0F4F8]">
@@ -20,7 +20,7 @@ export function ComplexitySlider({ selectedLevel, onSelectLevel }) {
         </span>
       </div>
 
-      <div className="relative flex items-center bg-[#E8E0D5]/50 dark:bg-[#23354D]/80 p-1.5 border-2 border-[#1C1917]/30 dark:border-[#8EA8C3]/40 rounded-2xl transition-colors duration-300 shadow-sm">
+      <div className="relative flex items-center bg-[#E8E0D5]/50 dark:bg-[#23354D]/80 backdrop-blur-md p-1.5 border-2 border-[#1C1917]/30 dark:border-[#8EA8C3]/40 rounded-2xl transition-colors duration-300 shadow-sm">
         {levels.map(({ key, data }) => {
           const isSelected = selectedLevel === key;
           return (

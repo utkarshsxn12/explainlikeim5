@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import ReactMarkdown from 'react-markdown';
-import { Copy, Check, AlertCircle, RefreshCw, BookOpen, GraduationCap, PlayCircle, ExternalLink, Terminal } from 'lucide-react';
+import { Copy, Check, AlertCircle, RefreshCw, BookOpen, GraduationCap, PlayCircle, ExternalLink, Terminal, Loader2, Sparkles } from 'lucide-react';
 import { COMPLEXITY_LEVELS } from '../utils/prompts';
 
 export function ExplanationCard({ 
@@ -15,6 +15,20 @@ export function ExplanationCard({
   onRetry 
 }) {
   const [copied, setCopied] = useState(false);
+  const [loadingTime, setLoadingTime] = useState(0);
+
+  useEffect(() => {
+    let timer;
+    if ((isLoading || (topic && !explanationText)) && !error) {
+      setLoadingTime(0);
+      timer = setInterval(() => {
+        setLoadingTime(prev => Number((prev + 0.1).toFixed(1)));
+      }, 100);
+    } else {
+      setLoadingTime(0);
+    }
+    return () => clearInterval(timer);
+  }, [isLoading, topic, explanationText, error]);
 
   const handleCopy = () => {
     if (!explanationText) return;
@@ -29,8 +43,10 @@ export function ExplanationCard({
   const scholarUrl = `https://scholar.google.com/scholar?q=${encodeURIComponent(topic || '')}`;
   const youtubeUrl = `https://www.youtube.com/results?search_query=${encodeURIComponent((topic || '') + ' explained')}`;
 
+  const isCurrentlyLoading = isLoading || (topic && !explanationText && !error);
+
   return (
-    <div className="w-full max-w-3xl mx-auto px-4 my-8">
+    <div id="explanation-section" className="w-full max-w-3xl mx-auto px-4 my-8">
       <AnimatePresence mode="wait">
         {error ? (
           <motion.div
@@ -39,7 +55,7 @@ export function ExplanationCard({
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: -15 }}
             transition={{ type: 'spring', stiffness: 350, damping: 25 }}
-            className="p-6 rounded-2xl bg-[#E8E0D5]/80 dark:bg-[#23354D]/90 border-2 border-rose-400 dark:border-rose-900/80 text-rose-950 dark:text-rose-200 text-left shadow-2xl"
+            className="p-6 rounded-2xl bg-[#E8E0D5]/90 dark:bg-[#23354D]/90 backdrop-blur-md border-2 border-rose-400 dark:border-rose-900/80 text-rose-950 dark:text-rose-200 text-left shadow-2xl"
           >
             <div className="flex items-center gap-3 mb-3 text-rose-700 dark:text-rose-400 font-mono text-xs font-bold uppercase tracking-wider">
               <AlertCircle className="w-5 h-5" />
@@ -61,29 +77,45 @@ export function ExplanationCard({
               </button>
             )}
           </motion.div>
-        ) : isLoading && !explanationText ? (
+        ) : isCurrentlyLoading ? (
           <motion.div
             key="skeleton"
-            initial={{ opacity: 0, scale: 0.96 }}
-            animate={{ opacity: 1, scale: 1 }}
+            initial={{ opacity: 0, scale: 0.96, y: 10 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.96 }}
             transition={{ duration: 0.3 }}
-            className="p-8 rounded-2xl bg-[#E8E0D5]/40 dark:bg-[#23354D]/70 border-2 border-[#1C1917]/30 dark:border-[#8EA8C3]/40 shadow-xl relative overflow-hidden"
+            className="p-8 rounded-2xl bg-[#E8E0D5]/95 dark:bg-[#23354D]/95 backdrop-blur-md border-2 border-[#1C1917] dark:border-[#F0F4F8] shadow-2xl relative overflow-hidden text-[#1C1917] dark:text-[#F0F4F8]"
           >
-            <div className="flex items-center justify-between mb-6 border-b border-[#1C1917]/20 dark:border-[#8EA8C3]/20 pb-4">
+            <div className="flex items-center justify-between mb-6 border-b border-[#1C1917]/20 dark:border-[#8EA8C3]/30 pb-4">
               <div className="flex items-center gap-3">
-                <div className="w-3 h-3 rounded-full bg-[#1C1917] dark:bg-[#F0F4F8] animate-ping"></div>
-                <span className="font-mono text-xs text-[#44403C] dark:text-[#B8C5D6] uppercase tracking-widest font-bold">
-                  Streaming {levelInfo.shortLabel} Mode Response...
-                </span>
+                <Loader2 className="w-5 h-5 animate-spin text-[#1C1917] dark:text-[#F0F4F8]" />
+                <div>
+                  <span className="font-mono text-xs text-[#1C1917] dark:text-[#F0F4F8] uppercase tracking-widest font-bold block">
+                    {topic ? `Explaining "${topic}"...` : `Generating ${levelInfo.shortLabel} Explanation...`}
+                  </span>
+                  <span className="font-mono text-[10px] text-[#44403C] dark:text-[#8EA8C3] uppercase tracking-wider">
+                    DECODING COMPLEXITY [{loadingTime}s]
+                  </span>
+                </div>
               </div>
+              <span className="px-3.5 py-1 rounded-full bg-[#1C1917] dark:bg-[#F0F4F8] text-[#FAF6EE] dark:text-[#02122F] font-mono text-xs font-black uppercase tracking-widest animate-pulse shadow-sm">
+                THINKING
+              </span>
             </div>
 
-            <div className="space-y-3">
-              <div className="h-4 bg-[#1C1917]/10 dark:bg-[#8EA8C3]/20 rounded-lg w-full shimmer-bg"></div>
-              <div className="h-4 bg-[#1C1917]/10 dark:bg-[#8EA8C3]/20 rounded-lg w-11/12 shimmer-bg"></div>
-              <div className="h-4 bg-[#1C1917]/10 dark:bg-[#8EA8C3]/20 rounded-lg w-4/5 shimmer-bg"></div>
-              <div className="h-4 bg-[#1C1917]/10 dark:bg-[#8EA8C3]/20 rounded-lg w-3/4 shimmer-bg"></div>
+            <div className="space-y-4 my-6">
+              <div className="h-5 bg-[#1C1917]/20 dark:bg-[#8EA8C3]/30 rounded-lg w-full shimmer-bg"></div>
+              <div className="h-5 bg-[#1C1917]/20 dark:bg-[#8EA8C3]/30 rounded-lg w-11/12 shimmer-bg"></div>
+              <div className="h-5 bg-[#1C1917]/20 dark:bg-[#8EA8C3]/30 rounded-lg w-4/5 shimmer-bg"></div>
+              <div className="h-5 bg-[#1C1917]/20 dark:bg-[#8EA8C3]/30 rounded-lg w-3/4 shimmer-bg"></div>
+            </div>
+
+            <div className="flex items-center justify-between font-mono text-[10px] text-[#44403C] dark:text-[#8EA8C3] uppercase tracking-wider font-bold pt-2 border-t border-[#1C1917]/10 dark:border-[#8EA8C3]/20">
+              <span className="flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-[#1C1917] dark:bg-[#F0F4F8] animate-ping"></span>
+                <span>REAL-TIME INFERENCE STREAMING</span>
+              </span>
+              <span>SYNTHESIZING...</span>
             </div>
           </motion.div>
         ) : explanationText ? (
@@ -95,7 +127,7 @@ export function ExplanationCard({
             transition={{ type: 'spring', stiffness: 350, damping: 28 }}
             className="w-full"
           >
-            <div className="relative p-6 sm:p-8 rounded-2xl bg-[#E8E0D5]/40 dark:bg-[#23354D]/70 border-2 border-[#1C1917]/30 dark:border-[#8EA8C3]/40 shadow-2xl text-[#1C1917] dark:text-[#F0F4F8] transition-colors duration-300">
+            <div className="relative p-6 sm:p-8 rounded-2xl bg-[#E8E0D5]/90 dark:bg-[#23354D]/90 backdrop-blur-md border-2 border-[#1C1917]/30 dark:border-[#8EA8C3]/40 shadow-2xl text-[#1C1917] dark:text-[#F0F4F8] transition-colors duration-300">
               <div className="flex flex-wrap items-center justify-between gap-3 mb-6 border-b border-[#1C1917]/20 dark:border-[#8EA8C3]/20 pb-4">
                 <div className="flex items-center gap-3">
                   <span className="px-3 py-1 rounded-full bg-[#1C1917] dark:bg-[#F0F4F8] text-[#FAF6EE] dark:text-[#02122F] font-mono font-bold text-xs uppercase tracking-wider">
@@ -229,7 +261,7 @@ export function ExplanationCard({
             key="empty"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="p-10 bg-[#E8E0D5]/20 dark:bg-[#23354D]/70 border-2 border-dashed border-[#1C1917]/30 dark:border-[#8EA8C3]/30 text-center rounded-2xl"
+            className="p-10 bg-[#E8E0D5]/20 dark:bg-[#23354D]/70 backdrop-blur-md border-2 border-dashed border-[#1C1917]/30 dark:border-[#8EA8C3]/30 text-center rounded-2xl"
           >
             <p className="font-mono text-xs uppercase tracking-widest text-[#44403C] dark:text-[#8EA8C3] font-bold">
               Your brain will thank you in 5 seconds.

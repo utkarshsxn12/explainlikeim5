@@ -6,6 +6,7 @@ import { ComplexitySlider } from './components/ComplexitySlider';
 import { ExplanationCard } from './components/ExplanationCard';
 import { RecentTopics } from './components/RecentTopics';
 import { EasterEggModal } from './components/EasterEggModal';
+import { GridBackground } from './components/GridBackground';
 import { fetchExplanationStreaming } from './services/groqService';
 import { COMPLEXITY_LEVELS } from './utils/prompts';
 
@@ -49,6 +50,13 @@ export default function App() {
     setIsLoading(true);
     setIsStreaming(false);
 
+    setTimeout(() => {
+      const el = document.getElementById('explanation-section');
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    }, 50);
+
     try {
       const result = await fetchExplanationStreaming(
         cleanTopic,
@@ -88,6 +96,8 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-[#FAF6EE] dark:bg-[#02122F] text-[#1C1917] dark:text-[#F0F4F8] flex flex-col transition-colors duration-300 relative overflow-hidden font-sans bg-grain">
+      <GridBackground isDarkMode={isDarkMode} />
+      
       <div className="absolute top-12 left-1/2 -translate-x-1/2 w-[600px] h-[350px] bg-amber-500/10 dark:bg-[#23354D]/30 rounded-full blur-[120px] pointer-events-none"></div>
 
       <Navbar 
@@ -139,7 +149,7 @@ export default function App() {
         />
       </main>
 
-      <footer className="w-full border-t border-[#1C1917]/20 dark:border-[#8EA8C3]/30 py-6 text-center text-xs font-mono text-[#44403C] dark:text-[#8EA8C3] relative z-10">
+      <footer className="w-full border-t border-[#1C1917]/20 dark:border-[#8EA8C3]/30 py-6 text-center text-xs font-mono text-[#44403C] dark:text-[#8EA8C3] relative z-10 backdrop-blur-md bg-[#FAF6EE]/70 dark:bg-[#02122F]/70">
         <div className="max-w-5xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-2 uppercase tracking-wider font-bold">
           <span>ELI5 — REAL-TIME INFERENCE PIPELINE ⚡</span>
           <span className="text-[#1C1917] dark:text-[#F0F4F8] font-extrabold">

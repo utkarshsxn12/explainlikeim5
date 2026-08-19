@@ -2,10 +2,10 @@ import { COMPLEXITY_LEVELS, EASTER_EGG_PROMPT } from '../utils/prompts';
 
 const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
 const MODEL_CANDIDATES = [
-  'groq/compound-mini',
-  'groq/compound',
+  'openai/gpt-oss-20b',
   'qwen/qwen3.6-27b',
-  'openai/gpt-oss-20b'
+  'openai/gpt-oss-120b',
+  'groq/compound-mini'
 ];
 
 export async function fetchExplanationStreaming(topic, levelKey = 'CHILD', onToken, onStart) {
@@ -34,11 +34,12 @@ export async function fetchExplanationStreaming(topic, levelKey = 'CHILD', onTok
         },
         body: JSON.stringify({
           model: modelName,
+          reasoning_format: 'hidden',
           messages: [
             { role: 'system', content: systemPrompt },
             { role: 'user', content: `Explain this topic clearly: "${topic}"` }
           ],
-          temperature: 0.6,
+          temperature: 0.5,
           max_tokens: 750,
           stream: true
         })
@@ -64,7 +65,7 @@ export async function fetchExplanationStreaming(topic, levelKey = 'CHILD', onTok
 
   const reader = response.body.getReader();
   const decoder = new TextDecoder('utf-8');
-  let fullText = '';
+  let fullRawText = '';
   let buffer = '';
 
   while (true) {
@@ -84,14 +85,27 @@ export async function fetchExplanationStreaming(topic, levelKey = 'CHILD', onTok
         const jsonStr = trimmed.slice(6);
         try {
           const parsed = JSON.parse(jsonStr);
-          const delta = parsed.choices[0]?.delta?.content || '';
-          if (delta) {
-            if (!firstTokenTime) {
-              firstTokenTime = performance.now();
+          const deltaContent = parsed.choices[0]?.delta?.content || '';
+
+          if (deltaContent) {
+            fullRawText += deltaContent;
+
+            let cleaned = fullRawText;
+            if (cleaned.includes('<think>')) {
+              if (cleaned.includes('</think>')) {
+                cleaned = cleaned.split('</think>').pop();
+              } else {
+                cleaned = '';
+              }
             }
-            fullText += delta;
-            if (onToken) {
-              onToken(delta, fullText);
+
+            cleaned = cleaned.replace(/<think>[\s\S]*?<\/think>/gi, '').replace(/<think>[\s\S]*/gi, '').trim();
+
+            if (cleaned && onToken) {
+              if (!firstTokenTime) {
+                firstTokenTime = performance.now();
+              }
+              onToken(deltaContent, cleaned);
             }
           }
         } catch (e) {
@@ -100,12 +114,22 @@ export async function fetchExplanationStreaming(topic, levelKey = 'CHILD', onTok
     }
   }
 
+  let finalCleanedText = fullRawText;
+  if (finalCleanedText.includes('<think>')) {
+    if (finalCleanedText.includes('</think>')) {
+      finalCleanedText = finalCleanedText.split('</think>').pop();
+    } else {
+      finalCleanedText = '';
+    }
+  }
+  finalCleanedText = finalCleanedText.replace(/<think>[\s\S]*?<\/think>/gi, '').replace(/<think>[\s\S]*/gi, '').trim();
+
   const endTime = performance.now();
   const totalLatencyMs = Math.round(endTime - startTime);
   const ttfbMs = firstTokenTime ? Math.round(firstTokenTime - startTime) : totalLatencyMs;
 
   return {
-    text: fullText,
+    text: finalCleanedText || fullRawText,
     latencyMs: totalLatencyMs,
     ttfbMs: ttfbMs,
     isEasterEgg
@@ -130,11 +154,12 @@ export async function fetchExplanationNonStreaming(topic, levelKey = 'CHILD') {
     },
     body: JSON.stringify({
       model: MODEL_CANDIDATES[0],
+      reasoning_format: 'hidden',
       messages: [
         { role: 'system', content: systemPrompt },
         { role: 'user', content: `Explain this topic clearly: "${topic}"` }
       ],
-      temperature: 0.6,
+      temperature: 0.5,
       max_tokens: 700,
       stream: false
     })
@@ -146,5 +171,6 @@ export async function fetchExplanationNonStreaming(topic, levelKey = 'CHILD') {
   }
 
   const data = await response.json();
-  return data.choices[0]?.message?.content || '';
+  const rawText = data.choices[0]?.message?.content || '';
+  return rawText.replace(/<think>[\s\S]*?<\/think>/gi, '').trim();
 }

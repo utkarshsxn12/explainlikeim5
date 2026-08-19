@@ -138,7 +138,7 @@ export function Hero({ topic, setTopic, onSubmit, isLoading, activeTopic, select
         </AnimatePresence>
       </div>
 
-      <div className="w-full max-w-3xl mr-auto pl-0 sm:pl-4 pr-0 sm:pr-12">
+      <div className="w-full max-w-3xl mx-auto">
         <motion.form 
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
