@@ -1,6 +1,21 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-sans: 'Plus Jakarta Sans', sans-serif;
+  --font-display: 'Space Grotesk', sans-serif;
+  --color-cute-pink: #FF6B9D;
+  --color-cute-purple: #7C3AED;
+  --color-cute-indigo: #4F46E5;
+  --color-cute-amber: #F59E0B;
+  --color-cute-teal: #0D9488;
+  --color-cute-mint: #10B981;
+  --color-cute-bgLight: #FAF9F6;
+  --color-cute-bgDark: #0B0F19;
+  --color-cute-cardLight: #FFFFFF;
+  --color-cute-cardDark: #131B2E;
+}
 
 @layer base {
   body {

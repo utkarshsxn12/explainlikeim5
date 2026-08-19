@@ -1,12 +1,13 @@
 import { COMPLEXITY_LEVELS, EASTER_EGG_PROMPT } from '../utils/prompts';
 
 const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
-const MODEL_NAME = 'llama-3.3-70b-versatile';
+const PRIMARY_MODEL = 'llama-3.3-70b-versatile';
+const FALLBACK_MODEL = 'llama-3.1-8b-instant';
 
 export async function fetchExplanationStreaming(topic, levelKey = 'CHILD', onToken, onStart) {
   const apiKey = import.meta.env.VITE_GROQ_API_KEY;
   if (!apiKey) {
-    throw new Error('Groq API Key is missing. Please check VITE_GROQ_API_KEY in .env.local');
+    throw new Error('Groq API Key is missing. Please set VITE_GROQ_API_KEY in .env.local');
   }
 
   const isEasterEgg = topic.trim().toLowerCase() === '42' || topic.trim().toLowerCase() === 'meaning of life';
@@ -16,23 +17,31 @@ export async function fetchExplanationStreaming(topic, levelKey = 'CHILD', onTok
   const startTime = performance.now();
   let firstTokenTime = null;
 
-  const response = await fetch(GROQ_API_URL, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${apiKey}`
-    },
-    body: JSON.stringify({
-      model: MODEL_NAME,
-      messages: [
-        { role: 'system', content: systemPrompt },
-        { role: 'user', content: `Explain this topic clearly: "${topic}"` }
-      ],
-      temperature: 0.6,
-      max_tokens: 450,
-      stream: true
-    })
-  });
+  const makeRequest = async (modelName) => {
+    return fetch(GROQ_API_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${apiKey}`
+      },
+      body: JSON.stringify({
+        model: modelName,
+        messages: [
+          { role: 'system', content: systemPrompt },
+          { role: 'user', content: `Explain this topic clearly: "${topic}"` }
+        ],
+        temperature: 0.6,
+        max_tokens: 450,
+        stream: true
+      })
+    });
+  };
+
+  let response = await makeRequest(PRIMARY_MODEL);
+
+  if (!response.ok && (response.status === 404 || response.status === 400)) {
+    response = await makeRequest(FALLBACK_MODEL);
+  }
 
   if (!response.ok) {
     const errorData = await response.json().catch(() => ({}));
@@ -108,7 +117,7 @@ export async function fetchExplanationNonStreaming(topic, levelKey = 'CHILD') {
       'Authorization': `Bearer ${apiKey}`
     },
     body: JSON.stringify({
-      model: MODEL_NAME,
+      model: PRIMARY_MODEL,
       messages: [
         { role: 'system', content: systemPrompt },
         { role: 'user', content: `Explain this topic clearly: "${topic}"` }
