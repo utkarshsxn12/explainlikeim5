@@ -85,9 +85,9 @@ export function Hero({ topic, setTopic, onSubmit, isLoading, activeTopic }) {
       <motion.p 
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
-        className="font-mono text-xs text-slate-500 dark:text-neutral-400 uppercase tracking-widest mb-8 text-center"
+        className="font-mono text-xs text-slate-500 dark:text-neutral-400 uppercase tracking-widest mb-8 text-center font-medium"
       >
-        Powered by Groq — avg response time tracked live
+        FOR ALL THE COMPLEX STUFF YOU NODDED ALONG TO BUT HAD ZERO CLUE ABOUT.
       </motion.p>
 
       <motion.h1 
