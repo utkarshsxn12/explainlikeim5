@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import ReactMarkdown from 'react-markdown';
 import { Zap, Copy, Check, AlertTriangle, Sparkles, RefreshCw, Clock } from 'lucide-react';
 import { COMPLEXITY_LEVELS } from '../utils/prompts';
 
@@ -124,10 +125,21 @@ export function ExplanationCard({
               </div>
             </div>
 
-            <div className="relative text-base sm:text-lg text-slate-800 dark:text-slate-200 leading-relaxed font-normal">
-              <p className={`whitespace-pre-wrap ${isStreaming ? 'typing-cursor' : ''}`}>
+            <div className={`relative text-base sm:text-lg text-slate-800 dark:text-slate-200 leading-relaxed font-normal ${isStreaming ? 'typing-cursor' : ''}`}>
+              <ReactMarkdown
+                components={{
+                  h2: ({node, ...props}) => <h2 className="font-display font-bold text-xl sm:text-2xl text-indigo-600 dark:text-indigo-400 mt-6 mb-3 border-b border-indigo-100 dark:border-indigo-900/40 pb-1.5" {...props} />,
+                  h3: ({node, ...props}) => <h3 className="font-display font-semibold text-lg sm:text-xl text-purple-600 dark:text-purple-400 mt-4 mb-2" {...props} />,
+                  p: ({node, ...props}) => <p className="mb-3.5 leading-relaxed" {...props} />,
+                  ul: ({node, ...props}) => <ul className="list-disc list-outside ml-5 space-y-2 mb-4" {...props} />,
+                  ol: ({node, ...props}) => <ol className="list-decimal list-outside ml-5 space-y-2 mb-4" {...props} />,
+                  li: ({node, ...props}) => <li className="text-slate-800 dark:text-slate-200 font-medium pl-1" {...props} />,
+                  strong: ({node, ...props}) => <strong className="font-bold text-slate-900 dark:text-white" {...props} />,
+                  code: ({node, ...props}) => <code className="px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-indigo-600 dark:text-indigo-300 font-mono text-sm" {...props} />
+                }}
+              >
                 {explanationText}
-              </p>
+              </ReactMarkdown>
             </div>
 
             {latencyMetrics && !isStreaming && (
@@ -137,7 +149,7 @@ export function ExplanationCard({
                   First token in {latencyMetrics.ttfbMs}ms
                 </span>
                 <span className="font-mono text-[11px] bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded">
-                  Groq Llama-3.3-70b
+                  Groq Active Models
                 </span>
               </div>
             )}

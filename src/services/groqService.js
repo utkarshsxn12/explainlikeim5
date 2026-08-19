@@ -39,7 +39,7 @@ export async function fetchExplanationStreaming(topic, levelKey = 'CHILD', onTok
             { role: 'user', content: `Explain this topic clearly: "${topic}"` }
           ],
           temperature: 0.6,
-          max_tokens: 450,
+          max_tokens: 750,
           stream: true
         })
       });
@@ -135,7 +135,7 @@ export async function fetchExplanationNonStreaming(topic, levelKey = 'CHILD') {
         { role: 'user', content: `Explain this topic clearly: "${topic}"` }
       ],
       temperature: 0.6,
-      max_tokens: 400,
+      max_tokens: 700,
       stream: false
     })
   });
