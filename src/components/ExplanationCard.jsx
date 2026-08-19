@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import ReactMarkdown from 'react-markdown';
-import { Copy, Check, AlertCircle, RefreshCw } from 'lucide-react';
+import { Copy, Check, AlertCircle, RefreshCw, BookOpen, GraduationCap, PlayCircle, ExternalLink } from 'lucide-react';
 import { COMPLEXITY_LEVELS } from '../utils/prompts';
 
 export function ExplanationCard({ 
@@ -24,6 +24,10 @@ export function ExplanationCard({
   };
 
   const levelInfo = COMPLEXITY_LEVELS[levelKey] || COMPLEXITY_LEVELS.CHILD;
+
+  const wikiUrl = `https://en.wikipedia.org/wiki/${encodeURIComponent(topic ? topic.replace(/ /g, '_') : '')}`;
+  const scholarUrl = `https://scholar.google.com/scholar?q=${encodeURIComponent(topic || '')}`;
+  const youtubeUrl = `https://www.youtube.com/results?search_query=${encodeURIComponent((topic || '') + ' explained')}`;
 
   return (
     <div className="w-full max-w-3xl mx-auto px-4 my-8">
@@ -149,6 +153,71 @@ export function ExplanationCard({
                   MODEL: GROQ ACTIVE PIPELINE
                 </span>
               </div>
+            )}
+
+            {levelKey === 'EXPERT' && !isStreaming && explanationText && (
+              <motion.div 
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, delay: 0.1 }}
+                className="mt-8 pt-6 border-t border-slate-200 dark:border-neutral-800"
+              >
+                <div className="font-mono text-xs font-bold text-lime-700 dark:text-[#C6FF00] uppercase tracking-widest mb-4 flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-lime-500 dark:bg-[#C6FF00]"></span>
+                  <span>GO DEEPER</span>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-3">
+                  <a
+                    href={wikiUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-between p-3.5 bg-slate-50 dark:bg-neutral-950 border border-slate-300 dark:border-neutral-800 text-slate-800 dark:text-neutral-200 hover:border-lime-500 dark:hover:border-[#C6FF00] hover:text-lime-700 dark:hover:text-[#C6FF00] hover:-translate-y-0.5 hover:shadow-md transition-all duration-200 group rounded-none"
+                  >
+                    <div className="flex items-center gap-2.5 min-w-0 pr-2">
+                      <BookOpen className="w-4 h-4 shrink-0 text-slate-500 dark:text-neutral-400 group-hover:text-lime-600 dark:group-hover:text-[#C6FF00]" />
+                      <span className="text-xs font-mono font-medium truncate">
+                        Wikipedia — {topic}
+                      </span>
+                    </div>
+                    <ExternalLink className="w-3.5 h-3.5 shrink-0 opacity-60 group-hover:opacity-100 transition-opacity" />
+                  </a>
+
+                  <a
+                    href={scholarUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-between p-3.5 bg-slate-50 dark:bg-neutral-950 border border-slate-300 dark:border-neutral-800 text-slate-800 dark:text-neutral-200 hover:border-lime-500 dark:hover:border-[#C6FF00] hover:text-lime-700 dark:hover:text-[#C6FF00] hover:-translate-y-0.5 hover:shadow-md transition-all duration-200 group rounded-none"
+                  >
+                    <div className="flex items-center gap-2.5 min-w-0 pr-2">
+                      <GraduationCap className="w-4 h-4 shrink-0 text-slate-500 dark:text-neutral-400 group-hover:text-lime-600 dark:group-hover:text-[#C6FF00]" />
+                      <span className="text-xs font-mono font-medium truncate">
+                        Google Scholar
+                      </span>
+                    </div>
+                    <ExternalLink className="w-3.5 h-3.5 shrink-0 opacity-60 group-hover:opacity-100 transition-opacity" />
+                  </a>
+
+                  <a
+                    href={youtubeUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-between p-3.5 bg-slate-50 dark:bg-neutral-950 border border-slate-300 dark:border-neutral-800 text-slate-800 dark:text-neutral-200 hover:border-lime-500 dark:hover:border-[#C6FF00] hover:text-lime-700 dark:hover:text-[#C6FF00] hover:-translate-y-0.5 hover:shadow-md transition-all duration-200 group rounded-none"
+                  >
+                    <div className="flex items-center gap-2.5 min-w-0 pr-2">
+                      <PlayCircle className="w-4 h-4 shrink-0 text-slate-500 dark:text-neutral-400 group-hover:text-lime-600 dark:group-hover:text-[#C6FF00]" />
+                      <span className="text-xs font-mono font-medium truncate">
+                        YouTube Deep-Dives
+                      </span>
+                    </div>
+                    <ExternalLink className="w-3.5 h-3.5 shrink-0 opacity-60 group-hover:opacity-100 transition-opacity" />
+                  </a>
+                </div>
+
+                <p className="font-mono text-[10px] text-slate-400 dark:text-neutral-500 text-left">
+                  Links generated from your search topic — not verified for accuracy of external content.
+                </p>
+              </motion.div>
             )}
           </motion.div>
         ) : (
