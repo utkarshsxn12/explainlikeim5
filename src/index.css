@@ -3,29 +3,34 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-  --font-sans: 'Plus Jakarta Sans', sans-serif;
-  --font-display: 'Space Grotesk', sans-serif;
-  --color-cute-pink: #FF6B9D;
-  --color-cute-purple: #7C3AED;
-  --color-cute-indigo: #4F46E5;
-  --color-cute-amber: #F59E0B;
-  --color-cute-teal: #0D9488;
-  --color-cute-mint: #10B981;
-  --color-cute-bgLight: #FAF9F6;
-  --color-cute-bgDark: #0B0F19;
-  --color-cute-cardLight: #FFFFFF;
-  --color-cute-cardDark: #131B2E;
+  --font-sans: 'Inter', sans-serif;
+  --font-serif: 'Instrument Serif', serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --color-lime-accent: #C6FF00;
+  --color-charcoal-bg: #0A0A0A;
+  --color-card-dark: #121212;
+  --color-border-dark: #222222;
 }
 
 @layer base {
   body {
-    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-family: 'Inter', sans-serif;
+    background-color: #0A0A0A;
+    color: #F5F5F5;
     overflow-x: hidden;
   }
 }
 
-.font-display {
-  font-family: 'Space Grotesk', sans-serif;
+.font-serif {
+  font-family: 'Instrument Serif', serif;
+}
+
+.font-mono {
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.bg-grain {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.03'/%3E%3C/svg%3E");
 }
 
 @keyframes cursorBlink {
@@ -37,18 +42,12 @@
   content: '▋';
   display: inline-block;
   margin-left: 2px;
-  color: #6366F1;
+  color: #C6FF00;
   animation: cursorBlink 0.8s infinite;
 }
 
 .shimmer-bg {
-  background: linear-gradient(90deg, rgba(243, 244, 246, 0.1) 0%, rgba(229, 231, 235, 0.4) 50%, rgba(243, 244, 246, 0.1) 100%);
-  background-size: 200% 100%;
-  animation: shimmer 1.5s infinite;
-}
-
-.dark .shimmer-bg {
-  background: linear-gradient(90deg, rgba(30, 41, 59, 0.3) 0%, rgba(51, 65, 85, 0.6) 50%, rgba(30, 41, 59, 0.3) 100%);
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.08) 50%, rgba(255, 255, 255, 0.03) 100%);
   background-size: 200% 100%;
   animation: shimmer 1.5s infinite;
 }

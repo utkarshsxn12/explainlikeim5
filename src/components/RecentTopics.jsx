@@ -1,31 +1,28 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { History, Sparkles } from 'lucide-react';
 
 export function RecentTopics({ topics, onSelectTopic }) {
   if (!topics || topics.length === 0) return null;
 
   return (
-    <div className="w-full max-w-xl mx-auto my-4 px-4 text-center">
-      <div className="flex items-center justify-center gap-1.5 text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 mb-2.5">
-        <History className="w-3.5 h-3.5" />
-        <span>Recent Confusion Topics</span>
+    <div className="w-full max-w-3xl mr-auto pl-0 sm:pl-4 pr-0 sm:pr-12 my-4">
+      <div className="font-mono text-[11px] uppercase tracking-widest text-neutral-400 mb-2">
+        Recent Topics
       </div>
 
-      <div className="flex flex-wrap items-center justify-center gap-2">
+      <div className="flex flex-wrap items-center gap-2">
         <AnimatePresence>
           {topics.map((t, idx) => (
             <motion.button
               key={`${t}-${idx}`}
-              initial={{ opacity: 0, scale: 0.8 }}
+              initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.8 }}
-              whileHover={{ scale: 1.05, y: -2 }}
-              whileTap={{ scale: 0.95 }}
+              exit={{ opacity: 0, scale: 0.9 }}
+              whileHover={{ y: -1 }}
+              whileTap={{ scale: 0.96 }}
               onClick={() => onSelectTopic(t)}
-              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs font-semibold text-slate-700 dark:text-slate-300 shadow-sm hover:border-indigo-400 dark:hover:border-indigo-500 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
+              className="inline-flex items-center gap-1.5 px-3 py-1 bg-[#121212] border border-neutral-800 text-xs font-mono text-neutral-300 hover:border-[#C6FF00] hover:text-[#C6FF00] transition-colors"
             >
-              <Sparkles className="w-3 h-3 text-amber-500" />
               <span>{t}</span>
             </motion.button>
           ))}

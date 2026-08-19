@@ -85,10 +85,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-cute-bgLight dark:bg-cute-bgDark text-slate-900 dark:text-slate-100 flex flex-col transition-colors duration-300 relative overflow-hidden font-sans">
-      <div className="absolute -top-32 -left-32 w-96 h-96 bg-indigo-400/20 dark:bg-indigo-600/10 rounded-full blur-3xl pointer-events-none"></div>
-      <div className="absolute top-1/3 -right-32 w-96 h-96 bg-pink-400/20 dark:bg-pink-600/10 rounded-full blur-3xl pointer-events-none"></div>
-
+    <div className="min-h-screen bg-[#0A0A0A] text-neutral-100 flex flex-col transition-colors duration-300 relative overflow-hidden font-sans bg-grain">
       <Navbar 
         isDarkMode={isDarkMode} 
         onToggleDarkMode={handleToggleDarkMode} 
@@ -131,10 +128,10 @@ export default function App() {
         />
       </main>
 
-      <footer className="w-full border-t border-slate-200/80 dark:border-slate-800/80 py-6 text-center text-xs font-semibold text-slate-500 dark:text-slate-400">
-        <div className="max-w-5xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
-          <span>ELI5 — Powered by Groq streaming speed ⚡</span>
-          <span className="text-indigo-600 dark:text-indigo-400 font-bold">No PhD Required 🧒</span>
+      <footer className="w-full border-t border-neutral-800 py-6 text-center text-xs font-mono text-neutral-400">
+        <div className="max-w-5xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-2 uppercase tracking-wider">
+          <span>ELI5 — GROQ STREAMING PIPELINE ⚡</span>
+          <span className="text-[#C6FF00] font-bold">NO PHD REQUIRED</span>
         </div>
       </footer>
 

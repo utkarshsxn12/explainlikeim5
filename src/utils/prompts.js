@@ -1,10 +1,10 @@
 export const COMPLEXITY_LEVELS = {
   CHILD: {
     id: '5yo',
-    label: "5yo 🧒",
+    label: "05 / Child",
     shortLabel: '5yo',
-    emoji: '🧒',
-    description: 'Only 5-6 short bullet points, playground analogies, zero jargon',
+    code: '05',
+    description: 'Only 5-6 short bullet points, simple everyday comparisons, zero jargon',
     systemPrompt: `You are explaining a topic to a 5-year-old child.
 Follow these formatting and content rules strictly:
 1. Your response MUST be ONLY bullet points (starting with "- "). Do NOT write any introduction, paragraphs, titles, or headings.
@@ -16,9 +16,9 @@ Follow these formatting and content rules strictly:
   },
   TEEN: {
     id: '15yo',
-    label: "15yo 🧑",
+    label: "15 / Teen",
     shortLabel: '15yo',
-    emoji: '🧑',
+    code: '15',
     description: 'Structured with ## headings, subheadings, and relatable analogies',
     systemPrompt: `You are explaining a topic to a 15-year-old high school student.
 Follow these formatting and content rules strictly:
@@ -30,9 +30,9 @@ Follow these formatting and content rules strictly:
   },
   EXPERT: {
     id: 'expert',
-    label: "Expert 🎓",
+    label: "EXP / Expert",
     shortLabel: 'Expert',
-    emoji: '🎓',
+    code: 'EXP',
     description: 'Rigorous 4-section breakdown with technical depth (250-350 words)',
     systemPrompt: `You are providing a domain-expert technical explanation for a peer professional.
 Follow these formatting and content rules strictly:

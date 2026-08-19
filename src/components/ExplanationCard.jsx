@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import ReactMarkdown from 'react-markdown';
-import { Zap, Copy, Check, AlertTriangle, Sparkles, RefreshCw, Clock } from 'lucide-react';
+import { Copy, Check, AlertCircle, RefreshCw } from 'lucide-react';
 import { COMPLEXITY_LEVELS } from '../utils/prompts';
 
 export function ExplanationCard({ 
@@ -26,7 +26,7 @@ export function ExplanationCard({
   const levelInfo = COMPLEXITY_LEVELS[levelKey] || COMPLEXITY_LEVELS.CHILD;
 
   return (
-    <div className="w-full max-w-3xl mx-auto px-4 my-6">
+    <div className="w-full max-w-3xl mx-auto px-4 my-8">
       <AnimatePresence mode="wait">
         {error ? (
           <motion.div
@@ -34,51 +34,50 @@ export function ExplanationCard({
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -15 }}
-            className="p-6 rounded-3xl bg-rose-50 dark:bg-rose-950/40 border-2 border-rose-200 dark:border-rose-800/80 text-rose-900 dark:text-rose-200 text-center shadow-lg"
+            className="p-6 bg-[#121212] border border-rose-900/60 text-neutral-200 text-left shadow-2xl"
           >
-            <div className="w-12 h-12 mx-auto mb-3 rounded-full bg-rose-100 dark:bg-rose-900/60 flex items-center justify-center text-rose-600 dark:text-rose-400">
-              <AlertTriangle className="w-6 h-6" />
+            <div className="flex items-center gap-3 mb-3 text-rose-500 font-mono text-xs font-bold uppercase tracking-wider">
+              <AlertCircle className="w-4 h-4" />
+              <span>Execution Error</span>
             </div>
-            <h3 className="font-display font-bold text-lg mb-1">Even we got confused. Try again? 😅</h3>
-            <p className="text-sm text-rose-700 dark:text-rose-300 max-w-md mx-auto mb-4 font-medium">
+            <h3 className="font-serif italic font-bold text-xl text-white mb-2">
+              Even we got confused. Try again?
+            </h3>
+            <p className="text-xs text-neutral-400 font-mono mb-4">
               {error}
             </p>
             {onRetry && (
               <button
                 onClick={onRetry}
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs uppercase tracking-wider shadow-md transition-colors"
+                className="inline-flex items-center gap-2 px-4 py-2 bg-rose-600 hover:bg-rose-500 text-white font-mono text-xs uppercase tracking-wider transition-colors"
               >
-                <RefreshCw className="w-4 h-4" />
-                <span>Retry Request</span>
+                <RefreshCw className="w-3.5 h-3.5" />
+                <span>RETRY REQUEST</span>
               </button>
             )}
           </motion.div>
         ) : isLoading && !explanationText ? (
           <motion.div
             key="skeleton"
-            initial={{ opacity: 0, scale: 0.98 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.98 }}
-            className="p-6 sm:p-8 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xl relative overflow-hidden"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="p-8 bg-[#121212] border border-neutral-800 relative overflow-hidden"
           >
-            <div className="flex items-center justify-between mb-6 border-b border-slate-100 dark:border-slate-800/80 pb-4">
+            <div className="flex items-center justify-between mb-6 border-b border-neutral-800 pb-4">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-2xl bg-indigo-100 dark:bg-indigo-950 flex items-center justify-center text-indigo-600 dark:text-indigo-400 animate-bounce">
-                  <Sparkles className="w-5 h-5" />
-                </div>
-                <div>
-                  <div className="h-4 w-32 bg-slate-200 dark:bg-slate-800 rounded animate-pulse mb-1.5"></div>
-                  <div className="h-3 w-20 bg-slate-100 dark:bg-slate-800/60 rounded animate-pulse"></div>
-                </div>
+                <div className="w-2 h-2 rounded-full bg-[#C6FF00] animate-ping"></div>
+                <span className="font-mono text-xs text-neutral-400 uppercase tracking-widest">
+                  Processing Stream...
+                </span>
               </div>
-              <span className="text-xs font-semibold text-indigo-500 animate-pulse">Simplifying the universe... ⚡</span>
             </div>
 
             <div className="space-y-3">
-              <div className="h-4 bg-slate-200 dark:bg-slate-800 rounded-lg w-full shimmer-bg"></div>
-              <div className="h-4 bg-slate-200 dark:bg-slate-800 rounded-lg w-11/12 shimmer-bg"></div>
-              <div className="h-4 bg-slate-200 dark:bg-slate-800 rounded-lg w-4/5 shimmer-bg"></div>
-              <div className="h-4 bg-slate-200 dark:bg-slate-800 rounded-lg w-3/4 shimmer-bg"></div>
+              <div className="h-4 bg-neutral-800/80 rounded-none w-full shimmer-bg"></div>
+              <div className="h-4 bg-neutral-800/80 rounded-none w-11/12 shimmer-bg"></div>
+              <div className="h-4 bg-neutral-800/80 rounded-none w-4/5 shimmer-bg"></div>
+              <div className="h-4 bg-neutral-800/80 rounded-none w-3/4 shimmer-bg"></div>
             </div>
           </motion.div>
         ) : explanationText ? (
@@ -86,56 +85,55 @@ export function ExplanationCard({
             key="result"
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
-            className="relative p-6 sm:p-8 rounded-3xl bg-white dark:bg-slate-900 border-2 border-indigo-100 dark:border-indigo-900/50 shadow-2xl overflow-hidden"
+            className="relative p-6 sm:p-8 bg-[#121212] border border-neutral-800 shadow-2xl"
           >
-            <div className="flex flex-wrap items-center justify-between gap-3 mb-6 border-b border-slate-100 dark:border-slate-800 pb-4">
+            <div className="flex flex-wrap items-center justify-between gap-3 mb-6 border-b border-neutral-800 pb-4">
               <div className="flex items-center gap-3">
-                <span className="text-2xl p-2 rounded-2xl bg-indigo-50 dark:bg-indigo-950/80 border border-indigo-100 dark:border-indigo-800/50">
-                  {levelInfo.emoji}
+                <span className="px-2.5 py-1 font-mono text-xs font-bold bg-neutral-900 border border-neutral-800 text-[#C6FF00]">
+                  {levelInfo.code}
                 </span>
                 <div>
-                  <h3 className="font-display font-bold text-lg text-slate-900 dark:text-white capitalize">
+                  <h3 className="font-serif italic font-bold text-2xl text-white capitalize leading-none mb-1">
                     {topic}
                   </h3>
-                  <p className="text-xs font-medium text-slate-500 dark:text-slate-400">
-                    Explained for {levelInfo.shortLabel}
+                  <p className="font-mono text-[10px] uppercase text-neutral-400 tracking-wider">
+                    TARGET: {levelInfo.shortLabel}
                   </p>
                 </div>
               </div>
 
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-3">
                 {latencyMetrics && (
                   <motion.div 
-                    initial={{ scale: 0.8, opacity: 0 }}
-                    animate={{ scale: 1, opacity: 1 }}
-                    className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-50 dark:bg-amber-950/60 border border-amber-200 dark:border-amber-800/80 text-amber-700 dark:text-amber-300 text-xs font-bold shadow-sm"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    className="px-3 py-1 bg-neutral-950 border border-neutral-800 text-[#C6FF00] font-mono text-xs"
                   >
-                    <Zap className="w-3.5 h-3.5 text-amber-500 fill-amber-500" />
-                    <span>Explained in {(latencyMetrics.latencyMs / 1000).toFixed(2)}s</span>
+                    {(latencyMetrics.latencyMs / 1000).toFixed(2)}s LATENCY
                   </motion.div>
                 )}
 
                 <button
                   onClick={handleCopy}
-                  className="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 transition-colors"
+                  className="p-2 bg-neutral-900 border border-neutral-800 hover:border-[#C6FF00] text-neutral-300 transition-colors"
                   title="Copy explanation"
                 >
-                  {copied ? <Check className="w-4 h-4 text-emerald-500" /> : <Copy className="w-4 h-4" />}
+                  {copied ? <Check className="w-4 h-4 text-[#C6FF00]" /> : <Copy className="w-4 h-4" />}
                 </button>
               </div>
             </div>
 
-            <div className={`relative text-base sm:text-lg text-slate-800 dark:text-slate-200 leading-relaxed font-normal ${isStreaming ? 'typing-cursor' : ''}`}>
+            <div className={`relative text-base sm:text-lg text-neutral-200 leading-relaxed font-normal ${isStreaming ? 'typing-cursor' : ''}`}>
               <ReactMarkdown
                 components={{
-                  h2: ({node, ...props}) => <h2 className="font-display font-bold text-xl sm:text-2xl text-indigo-600 dark:text-indigo-400 mt-6 mb-3 border-b border-indigo-100 dark:border-indigo-900/40 pb-1.5" {...props} />,
-                  h3: ({node, ...props}) => <h3 className="font-display font-semibold text-lg sm:text-xl text-purple-600 dark:text-purple-400 mt-4 mb-2" {...props} />,
-                  p: ({node, ...props}) => <p className="mb-3.5 leading-relaxed" {...props} />,
-                  ul: ({node, ...props}) => <ul className="list-disc list-outside ml-5 space-y-2 mb-4" {...props} />,
-                  ol: ({node, ...props}) => <ol className="list-decimal list-outside ml-5 space-y-2 mb-4" {...props} />,
-                  li: ({node, ...props}) => <li className="text-slate-800 dark:text-slate-200 font-medium pl-1" {...props} />,
-                  strong: ({node, ...props}) => <strong className="font-bold text-slate-900 dark:text-white" {...props} />,
-                  code: ({node, ...props}) => <code className="px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-indigo-600 dark:text-indigo-300 font-mono text-sm" {...props} />
+                  h2: ({node, ...props}) => <h2 className="font-serif italic font-bold text-2xl sm:text-3xl text-[#C6FF00] mt-8 mb-4 border-b border-neutral-800 pb-2" {...props} />,
+                  h3: ({node, ...props}) => <h3 className="font-sans font-semibold text-lg sm:text-xl text-white mt-6 mb-3" {...props} />,
+                  p: ({node, ...props}) => <p className="mb-4 leading-relaxed text-neutral-300" {...props} />,
+                  ul: ({node, ...props}) => <ul className="list-disc list-outside ml-5 space-y-2 mb-6" {...props} />,
+                  ol: ({node, ...props}) => <ol className="list-decimal list-outside ml-5 space-y-2 mb-6" {...props} />,
+                  li: ({node, ...props}) => <li className="text-neutral-200 font-normal pl-1" {...props} />,
+                  strong: ({node, ...props}) => <strong className="font-bold text-white text-[#C6FF00]" {...props} />,
+                  code: ({node, ...props}) => <code className="px-1.5 py-0.5 bg-neutral-900 border border-neutral-800 text-[#C6FF00] font-mono text-xs" {...props} />
                 }}
               >
                 {explanationText}
@@ -143,13 +141,12 @@ export function ExplanationCard({
             </div>
 
             {latencyMetrics && !isStreaming && (
-              <div className="mt-6 pt-4 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between text-xs text-slate-400 dark:text-slate-500">
-                <span className="flex items-center gap-1">
-                  <Clock className="w-3.5 h-3.5" />
-                  First token in {latencyMetrics.ttfbMs}ms
+              <div className="mt-8 pt-4 border-t border-neutral-800 flex items-center justify-between font-mono text-[10px] text-neutral-400 uppercase tracking-wider">
+                <span>
+                  TTFB: {latencyMetrics.ttfbMs}ms
                 </span>
-                <span className="font-mono text-[11px] bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded">
-                  Groq Active Models
+                <span>
+                  MODEL: GROQ ACTIVE PIPELINE
                 </span>
               </div>
             )}
@@ -159,12 +156,9 @@ export function ExplanationCard({
             key="empty"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="p-8 rounded-3xl bg-slate-50/60 dark:bg-slate-900/40 border-2 border-dashed border-slate-200 dark:border-slate-800 text-center"
+            className="p-10 bg-[#121212] border border-dashed border-neutral-800 text-center"
           >
-            <div className="w-12 h-12 mx-auto mb-3 rounded-full bg-indigo-50 dark:bg-indigo-950 flex items-center justify-center text-indigo-500">
-              <Sparkles className="w-6 h-6" />
-            </div>
-            <p className="font-display font-medium text-slate-600 dark:text-slate-400 text-sm">
+            <p className="font-mono text-xs uppercase tracking-widest text-neutral-400">
               Your brain will thank you in 5 seconds.
             </p>
           </motion.div>
