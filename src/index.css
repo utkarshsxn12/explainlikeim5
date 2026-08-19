@@ -41,7 +41,7 @@
 }
 
 .dark .typing-cursor::after {
-  color: #74C69D;
+  color: #38BDF8;
 }
 
 .shimmer-bg {
@@ -51,7 +51,7 @@
 }
 
 .dark .shimmer-bg {
-  background: linear-gradient(90deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.08) 50%, rgba(255, 255, 255, 0.03) 100%);
+  background: linear-gradient(90deg, rgba(56, 189, 248, 0.03) 0%, rgba(56, 189, 248, 0.1) 50%, rgba(56, 189, 248, 0.03) 100%);
   background-size: 200% 100%;
   animation: shimmer 1.5s infinite;
 }

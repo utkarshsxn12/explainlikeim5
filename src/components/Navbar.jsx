@@ -4,7 +4,7 @@ import { Sun, Moon } from 'lucide-react';
 
 export function Navbar({ isDarkMode, onToggleDarkMode, sessionCount }) {
   return (
-    <nav className="w-full max-w-6xl mx-auto px-6 py-5 flex items-center justify-between border-b border-[#1C1917]/20 dark:border-neutral-800 transition-colors duration-300">
+    <nav className="w-full max-w-6xl mx-auto px-6 py-5 flex items-center justify-between border-b border-[#1C1917]/20 dark:border-sky-900/40 transition-colors duration-300">
       <motion.div 
         whileHover={{ scale: 1.02 }}
         className="flex items-center gap-3 cursor-pointer"
@@ -13,7 +13,7 @@ export function Navbar({ isDarkMode, onToggleDarkMode, sessionCount }) {
           <span className="font-serif italic font-bold text-2xl sm:text-3xl tracking-tight text-[#1C1917] dark:text-white block leading-none transition-colors duration-300">
             ELI·5
           </span>
-          <span className="font-mono text-[9px] block text-[#44403C] dark:text-neutral-400 uppercase tracking-widest mt-1 font-bold">
+          <span className="font-mono text-[9px] block text-[#44403C] dark:text-sky-400 uppercase tracking-widest mt-1 font-bold">
             EXPLAIN LIKE I'M FIVE
           </span>
         </div>
@@ -24,9 +24,9 @@ export function Navbar({ isDarkMode, onToggleDarkMode, sessionCount }) {
           <motion.div 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="hidden sm:flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-[#1C1917]/30 dark:border-neutral-800 bg-[#E8E0D5]/60 dark:bg-neutral-900 text-[#1C1917] dark:text-neutral-300 text-xs font-mono font-bold transition-colors duration-300"
+            className="hidden sm:flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-[#1C1917]/30 dark:border-sky-800/60 bg-[#E8E0D5]/60 dark:bg-slate-900/90 text-[#1C1917] dark:text-sky-300 text-xs font-mono font-bold transition-colors duration-300 shadow-xs"
           >
-            <span className="w-2 h-2 rounded-full bg-[#1C1917] dark:bg-[#74C69D]"></span>
+            <span className="w-2 h-2 rounded-full bg-[#1C1917] dark:bg-[#38BDF8]"></span>
             <span>{sessionCount} RUNS</span>
           </motion.div>
         )}
@@ -35,11 +35,11 @@ export function Navbar({ isDarkMode, onToggleDarkMode, sessionCount }) {
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           onClick={onToggleDarkMode}
-          className="p-2.5 rounded-xl border border-[#1C1917]/30 dark:border-neutral-800 bg-[#E8E0D5]/50 dark:bg-neutral-900 text-[#1C1917] dark:text-neutral-200 hover:border-[#1C1917] dark:hover:border-[#74C69D] transition-colors shadow-xs"
+          className="p-2.5 rounded-xl border border-[#1C1917]/30 dark:border-sky-800/60 bg-[#E8E0D5]/50 dark:bg-slate-900/90 text-[#1C1917] dark:text-sky-300 hover:border-[#1C1917] dark:hover:border-[#38BDF8] transition-colors shadow-xs"
           aria-label="Toggle Theme"
         >
           {isDarkMode ? (
-            <Sun className="w-4 h-4 text-[#74C69D]" />
+            <Sun className="w-4 h-4 text-[#38BDF8]" />
           ) : (
             <Moon className="w-4 h-4 text-[#1C1917]" />
           )}
