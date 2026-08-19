@@ -1,14 +1,60 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Sparkles, Search, ArrowRight, Brain, Zap } from 'lucide-react';
+import { Sparkles, Search, ArrowRight } from 'lucide-react';
 
-export function Hero({ topic, setTopic, onSubmit, isLoading }) {
+const ROTATING_TOPICS = [
+  "Why your Wifi is slow.",
+  "The Stock Market.",
+  "Black Holes.",
+  "Why cats knock things off tables.",
+  "Crypto."
+];
+
+export function Hero({ topic, setTopic, onSubmit, isLoading, activeTopic }) {
+  const [currentText, setCurrentText] = useState('');
+  const [topicIndex, setTopicIndex] = useState(0);
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  useEffect(() => {
+    if (activeTopic) return;
+
+    const targetTopic = ROTATING_TOPICS[topicIndex];
+    let timer;
+
+    if (!isDeleting) {
+      if (currentText.length < targetTopic.length) {
+        timer = setTimeout(() => {
+          setCurrentText(targetTopic.slice(0, currentText.length + 1));
+        }, 75);
+      } else {
+        timer = setTimeout(() => {
+          setIsDeleting(true);
+        }, 2500);
+      }
+    } else {
+      if (currentText.length > 0) {
+        timer = setTimeout(() => {
+          setCurrentText(targetTopic.slice(0, currentText.length - 1));
+        }, 35);
+      } else {
+        setIsDeleting(false);
+        setTopicIndex((prev) => (prev + 1) % ROTATING_TOPICS.length);
+      }
+    }
+
+    return () => clearTimeout(timer);
+  }, [currentText, isDeleting, topicIndex, activeTopic]);
+
   const handleSubmit = (e) => {
     e.preventDefault();
     if (topic.trim() && !isLoading) {
       onSubmit(topic.trim());
     }
   };
+
+  const formattedActiveTopic = activeTopic 
+    ? (activeTopic.endsWith('.') ? activeTopic : `${activeTopic}.`) 
+    : '';
 
   return (
     <div className="relative pt-8 pb-6 px-4 max-w-4xl mx-auto text-center flex flex-col items-center">
@@ -27,9 +73,14 @@ export function Hero({ topic, setTopic, onSubmit, isLoading }) {
         initial={{ opacity: 0, y: 15 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.1 }}
-        className="font-display text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-[1.1] mb-6"
+        className="font-display text-3xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-[1.15] mb-6 min-h-[2.5em] sm:min-h-[2.2em] md:min-h-[2em] flex flex-wrap items-center justify-center gap-x-3"
       >
-        Quantum Physics.{' '}
+        <span>
+          {activeTopic ? formattedActiveTopic : currentText}
+          {!activeTopic && (
+            <span className="inline-block w-1 h-8 sm:h-10 bg-indigo-500 ml-1 animate-pulse rounded-full align-middle"></span>
+          )}
+        </span>
         <span className="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-500 bg-clip-text text-transparent underline decoration-amber-400 decoration-wavy decoration-2">
           Explained like you're 5.
         </span>

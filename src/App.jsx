@@ -101,6 +101,7 @@ export default function App() {
           setTopic={setTopic} 
           onSubmit={(t) => handleRunExplanation(t, selectedLevel)} 
           isLoading={isLoading} 
+          activeTopic={activeTopic}
         />
 
         <ComplexitySlider 
