@@ -9,16 +9,11 @@ export function Navbar({ isDarkMode, onToggleDarkMode, sessionCount }) {
         whileHover={{ scale: 1.02 }}
         className="flex items-center gap-3 cursor-pointer"
       >
-        <div className="w-9 h-9 border border-slate-300 dark:border-neutral-700 bg-slate-100 dark:bg-neutral-950 flex items-center justify-center rounded-sm transition-colors duration-300">
-          <span className="font-mono font-bold text-xs text-lime-700 dark:text-[#C6FF00] tracking-tighter">
-            E5
-          </span>
-        </div>
         <div>
-          <span className="font-serif italic font-bold text-2xl tracking-tight text-slate-900 dark:text-white block leading-none transition-colors duration-300">
+          <span className="font-serif italic font-bold text-2xl sm:text-3xl tracking-tight text-slate-900 dark:text-white block leading-none transition-colors duration-300">
             ELI·5
           </span>
-          <span className="font-mono text-[9px] block text-slate-500 dark:text-neutral-400 uppercase tracking-widest mt-0.5">
+          <span className="font-mono text-[9px] block text-slate-500 dark:text-neutral-400 uppercase tracking-widest mt-1">
             EXPLAIN LIKE I'M FIVE
           </span>
         </div>
