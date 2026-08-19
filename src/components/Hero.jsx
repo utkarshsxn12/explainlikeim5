@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search, ArrowUpRight } from 'lucide-react';
+import { COMPLEXITY_LEVELS } from '../utils/prompts';
 
 const ROTATING_TOPICS = [
   "Why your Wifi is slow.",
@@ -21,12 +22,14 @@ const ROTATING_SUBTEXTS = [
   { text: "That thing you nodded along to but never understood? Type it here.", duration: 4500, isSpecial: true }
 ];
 
-export function Hero({ topic, setTopic, onSubmit, isLoading, activeTopic }) {
+export function Hero({ topic, setTopic, onSubmit, isLoading, activeTopic, selectedLevel }) {
   const [currentText, setCurrentText] = useState('');
   const [topicIndex, setTopicIndex] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
   const [subtextIndex, setSubtextIndex] = useState(0);
+
+  const modeConfig = COMPLEXITY_LEVELS[selectedLevel] || COMPLEXITY_LEVELS.CHILD;
 
   useEffect(() => {
     if (activeTopic) return;
@@ -99,12 +102,20 @@ export function Hero({ topic, setTopic, onSubmit, isLoading, activeTopic }) {
         <div className="text-slate-900 dark:text-white block min-h-[1.25em] mb-1 font-serif">
           <span>{activeTopic ? formattedActiveTopic : currentText}</span>
           {!activeTopic && (
-            <span className="inline-block w-1 sm:w-1.5 h-[0.8em] bg-lime-500 dark:bg-[#C6FF00] ml-1.5 animate-pulse align-middle"></span>
+            <span 
+              className="inline-block w-1 sm:w-1.5 h-[0.8em] ml-1.5 animate-pulse align-middle"
+              style={{ backgroundColor: modeConfig.accentColor }}
+            ></span>
           )}
         </div>
 
-        <div className="text-lime-600 dark:text-[#C6FF00] not-italic font-sans font-bold text-3xl sm:text-5xl md:text-6xl uppercase tracking-tight block drop-shadow-[0_0_20px_rgba(198,255,0,0.25)]">
-          Explained like you're 5.
+        <div 
+          className="not-italic font-sans font-bold text-3xl sm:text-5xl md:text-6xl uppercase tracking-tight block transition-colors duration-300"
+          style={{ color: modeConfig.accentColor }}
+        >
+          {selectedLevel === 'CHILD' && "Explained like you're 5."}
+          {selectedLevel === 'TEEN' && "Explained like you're 15."}
+          {selectedLevel === 'EXPERT' && "Explained for an Expert."}
         </div>
       </motion.h1>
 
@@ -121,7 +132,10 @@ export function Hero({ topic, setTopic, onSubmit, isLoading, activeTopic }) {
             {activeSubtext.isSpecial ? (
               <span>
                 That thing you nodded along to but{' '}
-                <span className="text-lime-600 dark:text-[#C6FF00] font-semibold underline underline-offset-4 decoration-lime-500/50">
+                <span 
+                  className="font-semibold underline underline-offset-4"
+                  style={{ color: modeConfig.accentColor }}
+                >
                   never understood
                 </span>
                 ? Type it here.
@@ -141,9 +155,10 @@ export function Hero({ topic, setTopic, onSubmit, isLoading, activeTopic }) {
           onSubmit={handleSubmit}
           className="w-full relative"
         >
-          <div className={`relative flex items-center bg-white dark:bg-[#121212] border border-slate-300 dark:border-neutral-800 rounded-none p-2 transition-all duration-300 ${
-            isFocused ? 'border-lime-500 dark:border-[#C6FF00] shadow-[0_0_25px_rgba(198,255,0,0.18)]' : ''
-          }`}>
+          <div 
+            className="relative flex items-center bg-white dark:bg-[#121212] border border-slate-300 dark:border-neutral-800 rounded-none p-2 transition-all duration-300"
+            style={{ borderColor: isFocused ? modeConfig.accentColor : undefined }}
+          >
             <div className="pl-3 pr-2 text-slate-400 dark:text-neutral-500">
               <Search className="w-5 h-5" />
             </div>
@@ -164,10 +179,13 @@ export function Hero({ topic, setTopic, onSubmit, isLoading, activeTopic }) {
               whileHover={{ scale: 1.02, y: -1 }}
               whileTap={{ scale: 0.97 }}
               disabled={!topic.trim() || isLoading}
-              className={`flex items-center gap-2 px-6 py-2.5 rounded-none font-mono font-bold text-xs uppercase tracking-wider text-black transition-all duration-200 ${
+              style={{
+                backgroundColor: (!topic.trim() || isLoading) ? undefined : modeConfig.accentColor,
+              }}
+              className={`flex items-center gap-2 px-6 py-2.5 rounded-none font-mono font-bold text-xs uppercase tracking-wider transition-all duration-200 ${
                 !topic.trim() || isLoading 
                   ? 'bg-slate-200 dark:bg-neutral-800 text-slate-400 dark:text-neutral-500 cursor-not-allowed' 
-                  : 'bg-lime-400 dark:bg-[#C6FF00] hover:bg-lime-300 dark:hover:bg-[#b0e600] shadow-[0_0_15px_rgba(198,255,0,0.3)] hover:shadow-[0_0_25px_rgba(198,255,0,0.5)]'
+                  : 'text-black font-extrabold shadow-md'
               }`}
             >
               {isLoading ? (
@@ -187,7 +205,8 @@ export function Hero({ topic, setTopic, onSubmit, isLoading, activeTopic }) {
               initial={{ scaleX: 0 }}
               animate={{ scaleX: isFocused ? 1 : 0 }}
               transition={{ duration: 0.3 }}
-              className="absolute bottom-0 left-0 right-0 h-[2px] bg-lime-500 dark:bg-[#C6FF00] origin-center"
+              style={{ backgroundColor: modeConfig.accentColor }}
+              className="absolute bottom-0 left-0 right-0 h-[2px] origin-center"
             />
           </div>
         </motion.form>

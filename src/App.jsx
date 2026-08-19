@@ -6,6 +6,7 @@ import { ExplanationCard } from './components/ExplanationCard';
 import { RecentTopics } from './components/RecentTopics';
 import { EasterEggModal } from './components/EasterEggModal';
 import { fetchExplanationStreaming } from './services/groqService';
+import { COMPLEXITY_LEVELS } from './utils/prompts';
 
 export default function App() {
   const [topic, setTopic] = useState('');
@@ -22,6 +23,8 @@ export default function App() {
   const [isDarkMode, setIsDarkMode] = useState(() => {
     return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
   });
+
+  const modeConfig = COMPLEXITY_LEVELS[selectedLevel] || COMPLEXITY_LEVELS.CHILD;
 
   useEffect(() => {
     if (isDarkMode) {
@@ -86,7 +89,9 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-[#0A0A0A] text-slate-900 dark:text-neutral-100 flex flex-col transition-colors duration-300 relative overflow-hidden font-sans bg-grain">
-      <div className="absolute top-12 left-1/2 -translate-x-1/2 w-[600px] h-[350px] bg-lime-500/10 dark:bg-[#C6FF00]/8 rounded-full blur-[120px] pointer-events-none"></div>
+      <div 
+        className={`absolute top-12 left-1/2 -translate-x-1/2 w-[600px] h-[350px] rounded-full blur-[120px] pointer-events-none transition-all duration-500 ${modeConfig.themeGlow}`}
+      ></div>
 
       <Navbar 
         isDarkMode={isDarkMode} 
@@ -101,6 +106,7 @@ export default function App() {
           onSubmit={(t) => handleRunExplanation(t, selectedLevel)} 
           isLoading={isLoading} 
           activeTopic={activeTopic}
+          selectedLevel={selectedLevel}
         />
 
         <div className="w-full max-w-3xl border-t border-slate-200 dark:border-neutral-800/60 my-2"></div>
@@ -137,7 +143,9 @@ export default function App() {
       <footer className="w-full border-t border-slate-200 dark:border-neutral-800 py-6 text-center text-xs font-mono text-slate-500 dark:text-neutral-400 relative z-10">
         <div className="max-w-5xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-2 uppercase tracking-wider">
           <span>ELI5 — GROQ STREAMING PIPELINE ⚡</span>
-          <span className="text-lime-600 dark:text-[#C6FF00] font-bold">NO PHD REQUIRED</span>
+          <span className="font-bold" style={{ color: modeConfig.accentColor }}>
+            [{modeConfig.code}] {modeConfig.shortLabel.toUpperCase()} MODE ACTIVE
+          </span>
         </div>
       </footer>
 

@@ -4,41 +4,42 @@ import { COMPLEXITY_LEVELS } from '../utils/prompts';
 
 export function ComplexitySlider({ selectedLevel, onSelectLevel }) {
   const levels = [
-    { key: 'CHILD', data: COMPLEXITY_LEVELS.CHILD },
-    { key: 'TEEN', data: COMPLEXITY_LEVELS.TEEN },
-    { key: 'EXPERT', data: COMPLEXITY_LEVELS.EXPERT },
+    { key: 'CHILD', data: COMPLEXITY_LEVELS.CHILD, activeBg: 'bg-[#FF6B8B] text-white' },
+    { key: 'TEEN', data: COMPLEXITY_LEVELS.TEEN, activeBg: 'bg-[#00E5FF] text-slate-950' },
+    { key: 'EXPERT', data: COMPLEXITY_LEVELS.EXPERT, activeBg: 'bg-[#C6FF00] text-black' },
   ];
+
+  const currentConfig = COMPLEXITY_LEVELS[selectedLevel] || COMPLEXITY_LEVELS.CHILD;
 
   return (
     <div className="w-full max-w-3xl mr-auto pl-0 sm:pl-4 pr-0 sm:pr-12 my-6">
       <div className="flex items-center justify-between mb-2 font-mono text-xs uppercase tracking-wider text-slate-500 dark:text-neutral-400">
-        <span>Target Complexity</span>
-        <span className="text-lime-600 dark:text-[#C6FF00]">
-          [{COMPLEXITY_LEVELS[selectedLevel].code}] MODE
+        <span>Target Mode Personality</span>
+        <span className="font-bold" style={{ color: currentConfig.accentColor }}>
+          [{currentConfig.code}] {currentConfig.badge}
         </span>
       </div>
 
-      <div className="relative flex items-center bg-white dark:bg-[#121212] p-1 border border-slate-300 dark:border-neutral-800 transition-colors duration-300">
-        {levels.map(({ key, data }) => {
+      <div className="relative flex items-center bg-white dark:bg-[#121212] p-1.5 border border-slate-300 dark:border-neutral-800 transition-colors duration-300 shadow-sm">
+        {levels.map(({ key, data, activeBg }) => {
           const isSelected = selectedLevel === key;
           return (
             <button
               key={key}
               type="button"
               onClick={() => onSelectLevel(key)}
-              className={`relative z-10 flex-1 flex items-center justify-center gap-2 py-2.5 px-2 font-mono text-xs font-bold uppercase transition-all duration-200 ${
+              className={`relative z-10 flex-1 flex items-center justify-center gap-2 py-3 px-2 font-mono text-xs font-bold uppercase transition-all duration-300 ${
                 isSelected 
-                  ? 'text-black font-extrabold' 
+                  ? 'text-slate-950 font-black' 
                   : 'text-slate-600 dark:text-neutral-400 hover:text-slate-900 dark:hover:text-white'
               }`}
             >
-              <span>{data.code}</span>
-              <span className="hidden sm:inline font-sans text-xs">({data.shortLabel})</span>
+              <span>{data.label}</span>
 
               {isSelected && (
                 <motion.div
                   layoutId="sliderIndicator"
-                  className="absolute inset-0 bg-lime-400 dark:bg-[#C6FF00] -z-10 shadow-[0_0_15px_rgba(198,255,0,0.3)]"
+                  className={`absolute inset-0 ${activeBg} shadow-md`}
                   transition={{ type: 'spring', stiffness: 450, damping: 35 }}
                 />
               )}
@@ -51,9 +52,10 @@ export function ComplexitySlider({ selectedLevel, onSelectLevel }) {
         key={selectedLevel}
         initial={{ opacity: 0, y: 3 }}
         animate={{ opacity: 1, y: 0 }}
-        className="text-xs text-slate-500 dark:text-neutral-400 mt-2 font-sans italic"
+        className="text-xs text-slate-500 dark:text-neutral-400 mt-2.5 font-sans italic flex items-center gap-2"
       >
-        "{COMPLEXITY_LEVELS[selectedLevel].description}"
+        <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: currentConfig.accentColor }}></span>
+        "{currentConfig.description}"
       </motion.p>
     </div>
   );

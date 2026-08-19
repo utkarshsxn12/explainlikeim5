@@ -70,9 +70,12 @@ export function ExplanationCard({
           >
             <div className="flex items-center justify-between mb-6 border-b border-slate-200 dark:border-neutral-800 pb-4">
               <div className="flex items-center gap-3">
-                <div className="w-2.5 h-2.5 rounded-full bg-lime-500 dark:bg-[#C6FF00] animate-ping"></div>
+                <div 
+                  className="w-2.5 h-2.5 rounded-full animate-ping"
+                  style={{ backgroundColor: levelInfo.accentColor }}
+                ></div>
                 <span className="font-mono text-xs text-slate-500 dark:text-neutral-400 uppercase tracking-widest">
-                  Processing Stream...
+                  Processing {levelInfo.shortLabel} Stream...
                 </span>
               </div>
             </div>
@@ -89,19 +92,26 @@ export function ExplanationCard({
             key="result"
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
-            className="relative p-6 sm:p-8 bg-white dark:bg-[#121212] border border-slate-300 dark:border-neutral-800 shadow-2xl"
+            className={`relative p-6 sm:p-8 bg-white dark:bg-[#121212] border shadow-2xl transition-colors duration-300 ${levelInfo.cardBorder}`}
           >
             <div className="flex flex-wrap items-center justify-between gap-3 mb-6 border-b border-slate-200 dark:border-neutral-800 pb-4">
               <div className="flex items-center gap-3">
-                <span className="px-2.5 py-1 font-mono text-xs font-bold bg-slate-100 dark:bg-neutral-900 border border-slate-300 dark:border-neutral-800 text-lime-700 dark:text-[#C6FF00]">
+                <span 
+                  className="px-2.5 py-1 font-mono text-xs font-bold border"
+                  style={{ 
+                    color: levelInfo.accentColor,
+                    borderColor: `${levelInfo.accentColor}40`,
+                    backgroundColor: `${levelInfo.accentColor}10`
+                  }}
+                >
                   {levelInfo.code}
                 </span>
                 <div>
                   <h3 className="font-serif italic font-bold text-2xl text-slate-900 dark:text-white capitalize leading-none mb-1">
                     {topic}
                   </h3>
-                  <p className="font-mono text-[10px] uppercase text-slate-500 dark:text-neutral-400 tracking-wider">
-                    TARGET: {levelInfo.shortLabel}
+                  <p className="font-mono text-[10px] uppercase tracking-wider font-semibold" style={{ color: levelInfo.accentColor }}>
+                    {levelInfo.badge}
                   </p>
                 </div>
               </div>
@@ -111,7 +121,8 @@ export function ExplanationCard({
                   <motion.div 
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    className="px-3 py-1 bg-slate-100 dark:bg-neutral-950 border border-slate-300 dark:border-neutral-800 text-lime-700 dark:text-[#C6FF00] font-mono text-xs"
+                    className="px-3 py-1 bg-slate-100 dark:bg-neutral-950 border border-slate-300 dark:border-neutral-800 font-mono text-xs font-bold"
+                    style={{ color: levelInfo.accentColor }}
                   >
                     {(latencyMetrics.latencyMs / 1000).toFixed(2)}s LATENCY
                   </motion.div>
@@ -119,10 +130,11 @@ export function ExplanationCard({
 
                 <button
                   onClick={handleCopy}
-                  className="p-2 bg-slate-100 dark:bg-neutral-900 border border-slate-300 dark:border-neutral-800 hover:border-lime-500 dark:hover:border-[#C6FF00] text-slate-700 dark:text-neutral-300 transition-colors"
+                  className="p-2 bg-slate-100 dark:bg-neutral-900 border border-slate-300 dark:border-neutral-800 transition-colors"
+                  style={{ borderColor: copied ? levelInfo.accentColor : undefined }}
                   title="Copy explanation"
                 >
-                  {copied ? <Check className="w-4 h-4 text-lime-600 dark:text-[#C6FF00]" /> : <Copy className="w-4 h-4" />}
+                  {copied ? <Check className="w-4 h-4" style={{ color: levelInfo.accentColor }} /> : <Copy className="w-4 h-4 text-slate-700 dark:text-neutral-300" />}
                 </button>
               </div>
             </div>
@@ -130,14 +142,20 @@ export function ExplanationCard({
             <div className={`relative text-base sm:text-lg text-slate-800 dark:text-neutral-200 leading-relaxed font-normal ${isStreaming ? 'typing-cursor' : ''}`}>
               <ReactMarkdown
                 components={{
-                  h2: ({node, ...props}) => <h2 className="font-serif italic font-bold text-2xl sm:text-3xl text-lime-700 dark:text-[#C6FF00] mt-8 mb-4 border-b border-slate-200 dark:border-neutral-800 pb-2" {...props} />,
+                  h2: ({node, ...props}) => (
+                    <h2 
+                      className="font-serif italic font-bold text-2xl sm:text-3xl mt-8 mb-4 border-b border-slate-200 dark:border-neutral-800 pb-2" 
+                      style={{ color: levelInfo.accentColor }}
+                      {...props} 
+                    />
+                  ),
                   h3: ({node, ...props}) => <h3 className="font-sans font-semibold text-lg sm:text-xl text-slate-900 dark:text-white mt-6 mb-3" {...props} />,
                   p: ({node, ...props}) => <p className="mb-4 leading-relaxed text-slate-700 dark:text-neutral-300" {...props} />,
                   ul: ({node, ...props}) => <ul className="list-disc list-outside ml-5 space-y-2 mb-6" {...props} />,
                   ol: ({node, ...props}) => <ol className="list-decimal list-outside ml-5 space-y-2 mb-6" {...props} />,
                   li: ({node, ...props}) => <li className="text-slate-800 dark:text-neutral-200 font-normal pl-1" {...props} />,
-                  strong: ({node, ...props}) => <strong className="font-bold text-slate-900 dark:text-white text-lime-700 dark:text-[#C6FF00]" {...props} />,
-                  code: ({node, ...props}) => <code className="px-1.5 py-0.5 bg-slate-100 dark:bg-neutral-900 border border-slate-300 dark:border-neutral-800 text-lime-700 dark:text-[#C6FF00] font-mono text-xs" {...props} />
+                  strong: ({node, ...props}) => <strong className="font-bold text-slate-900 dark:text-white" style={{ color: levelInfo.accentColor }} {...props} />,
+                  code: ({node, ...props}) => <code className="px-1.5 py-0.5 bg-slate-100 dark:bg-neutral-900 border border-slate-300 dark:border-neutral-800 font-mono text-xs" style={{ color: levelInfo.accentColor }} {...props} />
                 }}
               >
                 {explanationText}
@@ -149,8 +167,8 @@ export function ExplanationCard({
                 <span>
                   TTFB: {latencyMetrics.ttfbMs}ms
                 </span>
-                <span>
-                  MODEL: GROQ ACTIVE PIPELINE
+                <span className="font-bold" style={{ color: levelInfo.accentColor }}>
+                  {levelInfo.code} MODE COMPLETED
                 </span>
               </div>
             )}
