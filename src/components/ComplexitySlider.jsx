@@ -4,9 +4,9 @@ import { COMPLEXITY_LEVELS } from '../utils/prompts';
 
 export function ComplexitySlider({ selectedLevel, onSelectLevel }) {
   const levels = [
-    { key: 'CHILD', data: COMPLEXITY_LEVELS.CHILD, activeBgLight: 'bg-[#1B4332] text-[#FDF6ED]', activeBgDark: 'bg-[#74C69D] text-black' },
-    { key: 'TEEN', data: COMPLEXITY_LEVELS.TEEN, activeBgLight: 'bg-[#2D6A4F] text-[#FDF6ED]', activeBgDark: 'bg-[#52B788] text-black' },
-    { key: 'EXPERT', data: COMPLEXITY_LEVELS.EXPERT, activeBgLight: 'bg-[#081C15] text-[#FDF6ED]', activeBgDark: 'bg-[#40916C] text-white' },
+    { key: 'CHILD', data: COMPLEXITY_LEVELS.CHILD },
+    { key: 'TEEN', data: COMPLEXITY_LEVELS.TEEN },
+    { key: 'EXPERT', data: COMPLEXITY_LEVELS.EXPERT },
   ];
 
   const currentConfig = COMPLEXITY_LEVELS[selectedLevel] || COMPLEXITY_LEVELS.CHILD;
@@ -21,22 +21,23 @@ export function ComplexitySlider({ selectedLevel, onSelectLevel }) {
       </div>
 
       <div className="relative flex items-center bg-[#FCD5CE]/40 dark:bg-[#1E1E1E] p-1.5 border-2 border-[#1B4332]/30 dark:border-neutral-700 rounded-2xl transition-colors duration-300 shadow-sm">
-        {levels.map(({ key, data, activeBgLight, activeBgDark }) => {
+        {levels.map(({ key, data }) => {
           const isSelected = selectedLevel === key;
           return (
             <button
               key={key}
               type="button"
               onClick={() => onSelectLevel(key)}
-              className={`relative z-10 flex-1 flex items-center justify-center gap-2 py-3 px-2 font-mono text-xs font-bold uppercase transition-colors duration-200 ${
+              className={`relative flex-1 flex items-center justify-center gap-2 py-3 px-2 font-mono text-xs font-bold uppercase transition-colors duration-200 ${
                 isSelected 
-                  ? 'text-white dark:text-black font-extrabold' 
+                  ? 'text-[#FDF6ED] dark:text-slate-950 font-black' 
                   : 'text-[#1B4332] dark:text-neutral-400 hover:text-slate-900 dark:hover:text-white'
               }`}
             >
               <motion.span
                 animate={{ scale: isSelected ? 1.05 : 1 }}
                 transition={{ duration: 0.2 }}
+                className="relative z-20"
               >
                 {data.label}
               </motion.span>
@@ -44,7 +45,7 @@ export function ComplexitySlider({ selectedLevel, onSelectLevel }) {
               {isSelected && (
                 <motion.div
                   layoutId="sliderIndicator"
-                  className={`absolute inset-0 ${activeBgLight} dark:${activeBgDark} rounded-xl shadow-md`}
+                  className="absolute inset-0 bg-[#1B4332] dark:bg-[#74C69D] rounded-xl shadow-md z-10"
                   transition={{ type: 'spring', stiffness: 500, damping: 30 }}
                 />
               )}
