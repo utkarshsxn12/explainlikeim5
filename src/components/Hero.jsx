@@ -88,7 +88,7 @@ export function Hero({ topic, setTopic, onSubmit, isLoading, activeTopic, select
       <motion.p 
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
-        className="font-mono text-xs text-slate-500 dark:text-neutral-400 uppercase tracking-widest mb-8 text-center font-medium"
+        className="font-mono text-xs text-[#2D6A4F] dark:text-neutral-400 uppercase tracking-widest mb-8 text-center font-bold"
       >
         FOR ALL THE COMPLEX STUFF YOU NODDED ALONG TO BUT HAD ZERO CLUE ABOUT.
       </motion.p>
@@ -97,22 +97,16 @@ export function Hero({ topic, setTopic, onSubmit, isLoading, activeTopic, select
         initial={{ opacity: 0, y: 15 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.1 }}
-        className="font-serif italic text-4xl sm:text-6xl md:text-7xl tracking-tight text-slate-900 dark:text-white leading-[1.15] mb-6 text-center w-full"
+        className="font-serif italic text-4xl sm:text-6xl md:text-7xl tracking-tight text-[#1B4332] dark:text-white leading-[1.15] mb-6 text-center w-full"
       >
-        <div className="text-slate-900 dark:text-white block min-h-[1.25em] mb-1 font-serif">
+        <div className="text-[#1B4332] dark:text-white block min-h-[1.25em] mb-1 font-serif">
           <span>{activeTopic ? formattedActiveTopic : currentText}</span>
           {!activeTopic && (
-            <span 
-              className="inline-block w-1 sm:w-1.5 h-[0.8em] ml-1.5 animate-pulse align-middle"
-              style={{ backgroundColor: modeConfig.accentColor }}
-            ></span>
+            <span className="inline-block w-1 sm:w-1.5 h-[0.8em] bg-[#1B4332] dark:bg-[#74C69D] ml-1.5 animate-pulse align-middle"></span>
           )}
         </div>
 
-        <div 
-          className="not-italic font-sans font-bold text-3xl sm:text-5xl md:text-6xl uppercase tracking-tight block transition-colors duration-300"
-          style={{ color: modeConfig.accentColor }}
-        >
+        <div className="not-italic font-sans font-bold text-3xl sm:text-5xl md:text-6xl uppercase tracking-tight block text-[#1B4332] dark:text-[#74C69D]">
           {selectedLevel === 'CHILD' && "Explained like you're 5."}
           {selectedLevel === 'TEEN' && "Explained like you're 15."}
           {selectedLevel === 'EXPERT' && "Explained for an Expert."}
@@ -127,15 +121,12 @@ export function Hero({ topic, setTopic, onSubmit, isLoading, activeTopic, select
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -5 }}
             transition={{ duration: 0.4 }}
-            className="text-base sm:text-lg text-slate-600 dark:text-neutral-300 max-w-2xl font-normal text-center leading-relaxed"
+            className="text-base sm:text-lg text-[#2D6A4F] dark:text-neutral-300 max-w-2xl font-medium text-center leading-relaxed"
           >
             {activeSubtext.isSpecial ? (
               <span>
                 That thing you nodded along to but{' '}
-                <span 
-                  className="font-semibold underline underline-offset-4"
-                  style={{ color: modeConfig.accentColor }}
-                >
+                <span className="text-[#1B4332] dark:text-[#74C69D] font-extrabold underline underline-offset-4 decoration-[#1B4332]/50 dark:decoration-[#74C69D]/50">
                   never understood
                 </span>
                 ? Type it here.
@@ -156,10 +147,11 @@ export function Hero({ topic, setTopic, onSubmit, isLoading, activeTopic, select
           className="w-full relative"
         >
           <div 
-            className="relative flex items-center bg-white dark:bg-[#121212] border border-slate-300 dark:border-neutral-800 rounded-none p-2 transition-all duration-300"
-            style={{ borderColor: isFocused ? modeConfig.accentColor : undefined }}
+            className={`relative flex items-center bg-[#FCD5CE]/60 dark:bg-[#1E1E1E] border-2 border-[#1B4332] dark:border-neutral-700 rounded-2xl p-2 transition-all duration-300 shadow-md ${
+              isFocused ? 'ring-2 ring-[#1B4332] dark:ring-[#74C69D]' : ''
+            }`}
           >
-            <div className="pl-3 pr-2 text-slate-400 dark:text-neutral-500">
+            <div className="pl-3 pr-2 text-[#1B4332] dark:text-neutral-400">
               <Search className="w-5 h-5" />
             </div>
 
@@ -170,27 +162,22 @@ export function Hero({ topic, setTopic, onSubmit, isLoading, activeTopic, select
               onFocus={() => setIsFocused(true)}
               onBlur={() => setIsFocused(false)}
               placeholder="Ask me literally anything..."
-              className="w-full bg-transparent text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-neutral-500 text-sm sm:text-base font-sans focus:outline-none py-2 px-1"
+              className="w-full bg-transparent text-[#1B4332] dark:text-white placeholder-[#2D6A4F]/70 dark:placeholder-neutral-500 text-sm sm:text-base font-sans font-medium focus:outline-none py-2 px-1"
               disabled={isLoading}
             />
 
             <motion.button
               type="submit"
-              whileHover={{ scale: 1.02, y: -1 }}
+              whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
               disabled={!topic.trim() || isLoading}
-              style={{
-                backgroundColor: (!topic.trim() || isLoading) ? undefined : modeConfig.accentColor,
-              }}
-              className={`flex items-center gap-2 px-6 py-2.5 rounded-none font-mono font-bold text-xs uppercase tracking-wider transition-all duration-200 ${
-                !topic.trim() || isLoading 
-                  ? 'bg-slate-200 dark:bg-neutral-800 text-slate-400 dark:text-neutral-500 cursor-not-allowed' 
-                  : 'text-black font-extrabold shadow-md'
+              className={`flex items-center gap-2 px-6 py-3 rounded-xl font-mono font-bold text-xs uppercase tracking-wider text-[#FDF6ED] dark:text-black bg-[#1B4332] dark:bg-[#74C69D] hover:bg-[#2D6A4F] dark:hover:bg-[#52B788] transition-all duration-200 shadow-md ${
+                !topic.trim() || isLoading ? 'opacity-60 cursor-not-allowed' : ''
               }`}
             >
               {isLoading ? (
                 <div className="flex items-center gap-2">
-                  <div className="w-3.5 h-3.5 border-2 border-black border-t-transparent rounded-full animate-spin"></div>
+                  <div className="w-3.5 h-3.5 border-2 border-white dark:border-black border-t-transparent rounded-full animate-spin"></div>
                   <span>WAIT</span>
                 </div>
               ) : (
@@ -200,14 +187,6 @@ export function Hero({ topic, setTopic, onSubmit, isLoading, activeTopic, select
                 </>
               )}
             </motion.button>
-
-            <motion.div 
-              initial={{ scaleX: 0 }}
-              animate={{ scaleX: isFocused ? 1 : 0 }}
-              transition={{ duration: 0.3 }}
-              style={{ backgroundColor: modeConfig.accentColor }}
-              className="absolute bottom-0 left-0 right-0 h-[2px] origin-center"
-            />
           </div>
         </motion.form>
       </div>

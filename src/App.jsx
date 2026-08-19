@@ -88,10 +88,8 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-[#0A0A0A] text-slate-900 dark:text-neutral-100 flex flex-col transition-colors duration-300 relative overflow-hidden font-sans bg-grain">
-      <div 
-        className={`absolute top-12 left-1/2 -translate-x-1/2 w-[600px] h-[350px] rounded-full blur-[120px] pointer-events-none transition-all duration-500 ${modeConfig.themeGlow}`}
-      ></div>
+    <div className="min-h-screen bg-[#FDF6ED] dark:bg-[#121212] text-[#1B4332] dark:text-neutral-100 flex flex-col transition-colors duration-300 relative overflow-hidden font-sans bg-grain">
+      <div className="absolute top-12 left-1/2 -translate-x-1/2 w-[600px] h-[350px] bg-emerald-500/10 dark:bg-emerald-500/10 rounded-full blur-[120px] pointer-events-none"></div>
 
       <Navbar 
         isDarkMode={isDarkMode} 
@@ -109,7 +107,7 @@ export default function App() {
           selectedLevel={selectedLevel}
         />
 
-        <div className="w-full max-w-3xl border-t border-slate-200 dark:border-neutral-800/60 my-2"></div>
+        <div className="w-full max-w-3xl border-t border-[#1B4332]/20 dark:border-neutral-800 my-2"></div>
 
         <ComplexitySlider 
           selectedLevel={selectedLevel} 
@@ -126,7 +124,7 @@ export default function App() {
           onSelectTopic={(t) => handleRunExplanation(t, selectedLevel)} 
         />
 
-        <div className="w-full max-w-3xl border-t border-slate-200 dark:border-neutral-800/60 my-2"></div>
+        <div className="w-full max-w-3xl border-t border-[#1B4332]/20 dark:border-neutral-800 my-2"></div>
 
         <ExplanationCard 
           topic={activeTopic}
@@ -140,10 +138,10 @@ export default function App() {
         />
       </main>
 
-      <footer className="w-full border-t border-slate-200 dark:border-neutral-800 py-6 text-center text-xs font-mono text-slate-500 dark:text-neutral-400 relative z-10">
-        <div className="max-w-5xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-2 uppercase tracking-wider">
+      <footer className="w-full border-t border-[#1B4332]/20 dark:border-neutral-800 py-6 text-center text-xs font-mono text-[#2D6A4F] dark:text-neutral-400 relative z-10">
+        <div className="max-w-5xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-2 uppercase tracking-wider font-bold">
           <span>ELI5 — GROQ STREAMING PIPELINE ⚡</span>
-          <span className="font-bold" style={{ color: modeConfig.accentColor }}>
+          <span className="text-[#1B4332] dark:text-[#74C69D] font-extrabold">
             [{modeConfig.code}] {modeConfig.shortLabel.toUpperCase()} MODE ACTIVE
           </span>
         </div>

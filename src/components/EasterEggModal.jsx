@@ -32,32 +32,32 @@ export function EasterEggModal({ isOpen, onClose }) {
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 0.95 }}
-          className="relative w-full max-w-lg p-8 bg-white dark:bg-[#121212] border border-lime-500 dark:border-[#C6FF00] text-slate-900 dark:text-white text-center shadow-2xl"
+          className="relative w-full max-w-lg p-8 bg-[#FDF6ED] dark:bg-[#1E1E1E] border-2 border-[#1B4332] dark:border-[#74C69D] text-[#1B4332] dark:text-white text-center shadow-2xl rounded-2xl"
         >
           <div className="absolute top-0 right-0 p-4">
             <button
               onClick={onClose}
-              className="p-2 text-slate-500 dark:text-neutral-400 hover:text-slate-900 dark:hover:text-white transition-colors"
+              className="p-2 text-[#2D6A4F] dark:text-neutral-400 hover:text-[#1B4332] dark:hover:text-white transition-colors"
             >
               <X className="w-5 h-5" />
             </button>
           </div>
 
-          <span className="inline-block px-3 py-1 bg-slate-100 dark:bg-neutral-900 border border-slate-300 dark:border-neutral-800 text-lime-700 dark:text-[#C6FF00] font-mono text-[10px] uppercase tracking-widest mb-4">
+          <span className="inline-block px-3 py-1 rounded-full bg-[#FCD5CE]/60 dark:bg-neutral-900 border border-[#1B4332]/30 dark:border-neutral-700 text-[#1B4332] dark:text-[#74C69D] font-mono text-[10px] font-bold uppercase tracking-widest mb-4">
             EASTER EGG UNLOCKED
           </span>
 
-          <h2 className="font-serif italic font-bold text-4xl sm:text-5xl text-slate-900 dark:text-white mb-4">
-            The Answer Is <span className="text-lime-600 dark:text-[#C6FF00] not-italic font-sans">42</span>
+          <h2 className="font-serif italic font-bold text-4xl sm:text-5xl text-[#1B4332] dark:text-white mb-4">
+            The Answer Is <span className="text-[#1B4332] dark:text-[#74C69D] not-italic font-sans">42</span>
           </h2>
 
-          <p className="text-slate-600 dark:text-neutral-300 text-sm sm:text-base leading-relaxed mb-6 font-sans">
+          <p className="text-[#2D6A4F] dark:text-neutral-300 text-sm sm:text-base leading-relaxed mb-6 font-sans font-medium">
             Don't Panic! You found the secret cosmic response. Deep Thought took 7.5 million years to calculate this, but Groq streamed it instantly. Remember to grab your towel!
           </p>
 
           <button
             onClick={onClose}
-            className="w-full py-3 bg-lime-400 dark:bg-[#C6FF00] hover:bg-lime-300 dark:hover:bg-[#b0e600] text-black font-mono font-bold text-xs uppercase tracking-widest transition-colors shadow-md"
+            className="w-full py-3 bg-[#1B4332] dark:bg-[#74C69D] hover:bg-[#2D6A4F] dark:hover:bg-[#52B788] text-[#FDF6ED] dark:text-black font-mono font-bold text-xs uppercase tracking-widest transition-colors rounded-xl shadow-md"
           >
             ALWAYS KNOW YOUR TOWEL
           </button>
