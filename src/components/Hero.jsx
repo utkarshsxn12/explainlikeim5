@@ -73,15 +73,15 @@ export function Hero({ topic, setTopic, onSubmit, isLoading, activeTopic }) {
         initial={{ opacity: 0, y: 15 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.1 }}
-        className="font-display text-3xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-[1.15] mb-6 min-h-[2.5em] sm:min-h-[2.2em] md:min-h-[2em] flex flex-wrap items-center justify-center gap-x-3"
+        className="font-display text-3xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-[1.2] mb-6 min-h-[2.4em] sm:min-h-[2.2em] text-center"
       >
-        <span>
+        <span className="inline">
           {activeTopic ? formattedActiveTopic : currentText}
           {!activeTopic && (
-            <span className="inline-block w-1 h-8 sm:h-10 bg-indigo-500 ml-1 animate-pulse rounded-full align-middle"></span>
+            <span className="inline-block w-1 sm:w-1.5 h-[0.85em] bg-indigo-500 ml-1.5 animate-pulse rounded-full align-middle"></span>
           )}
-        </span>
-        <span className="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-500 bg-clip-text text-transparent underline decoration-amber-400 decoration-wavy decoration-2">
+        </span>{' '}
+        <span className="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-500 bg-clip-text text-transparent underline decoration-amber-400 decoration-wavy decoration-2 inline-block">
           Explained like you're 5.
         </span>
       </motion.h1>
