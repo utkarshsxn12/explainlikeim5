@@ -2,57 +2,11 @@ import { COMPLEXITY_LEVELS, EASTER_EGG_PROMPT } from '../utils/prompts';
 
 const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
 const MODEL_CANDIDATES = [
-  'qwen/qwen3.6-27b',
   'openai/gpt-oss-20b',
+  'qwen/qwen3.6-27b',
   'openai/gpt-oss-120b',
   'groq/compound-mini'
 ];
-
-function sanitizeExplanation(raw) {
-  if (!raw) return '';
-
-  let text = raw;
-
-  if (text.includes('</think>')) {
-    text = text.split('</think>').pop();
-  }
-
-  text = text.replace(/<think>[\s\S]*?<\/think>/gi, '').replace(/<think>[\s\S]*/gi, '');
-
-  const lines = text.split('\n');
-  let inPlanningBlock = false;
-  const cleanLines = [];
-
-  for (const line of lines) {
-    const trimmed = line.trim();
-
-    if (
-      trimmed.startsWith('<think>') ||
-      trimmed.includes("Here's a thinking process") ||
-      /^-\s*(Analyze User Input|Topic:|Target Audience|Format Requirements|Required Structure|Tone\/Style|Constraints|Deconstruct|Format:|Count:|Length:|Vocabulary:|No jargon|Check Constraints|Only bullet|5-6 bullets|Each starts|Brainstorming Content)/i.test(trimmed) ||
-      /^(Analyze User Input|Target Audience|Format Requirements|Required Structure|Tone\/Style|Constraints|Deconstruct Constraints|Check Constraints):?$/i.test(trimmed)
-    ) {
-      inPlanningBlock = true;
-      continue;
-    }
-
-    if (
-      /^-\s*(Output ONLY|Structure:|No system rules|No extra text|Keep the|Provide exactly|Use simple|Zero technical|Each bullet|Clear, appropriate)/i.test(trimmed)
-    ) {
-      continue;
-    }
-
-    if (trimmed.startsWith('##') || /^-\s*"?[A-Z0-9]/.test(trimmed)) {
-      inPlanningBlock = false;
-    }
-
-    if (!inPlanningBlock) {
-      cleanLines.push(line);
-    }
-  }
-
-  return cleanLines.join('\n').trim();
-}
 
 export async function fetchExplanationStreaming(topic, levelKey = 'CHILD', onToken, onStart) {
   const apiKey = import.meta.env.VITE_GROQ_API_KEY;
@@ -73,7 +27,7 @@ export async function fetchExplanationStreaming(topic, levelKey = 'CHILD', onTok
   for (const modelName of MODEL_CANDIDATES) {
     try {
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 5000);
+      const timeoutId = setTimeout(() => controller.abort(), 6000);
 
       const res = await fetch(GROQ_API_URL, {
         method: 'POST',
@@ -88,7 +42,7 @@ export async function fetchExplanationStreaming(topic, levelKey = 'CHILD', onTok
             { role: 'system', content: systemPrompt },
             { role: 'user', content: `Explain this topic clearly: "${topic}"` }
           ],
-          temperature: 0.3,
+          temperature: 0.4,
           max_tokens: 750,
           stream: true
         })
@@ -137,20 +91,21 @@ export async function fetchExplanationStreaming(topic, levelKey = 'CHILD', onTok
         try {
           const parsed = JSON.parse(jsonStr);
           const deltaContent = parsed.choices[0]?.delta?.content || '';
-          const deltaReasoning = parsed.choices[0]?.delta?.reasoning || '';
-          const delta = deltaContent || deltaReasoning || '';
 
-          if (delta) {
-            rawText += delta;
-            const cleanedText = sanitizeExplanation(rawText);
+          if (deltaContent) {
+            if (!firstTokenTime) {
+              firstTokenTime = performance.now();
+            }
+            rawText += deltaContent;
 
-            if (cleanedText) {
-              if (!firstTokenTime) {
-                firstTokenTime = performance.now();
-              }
-              if (onToken) {
-                onToken(delta, cleanedText);
-              }
+            let cleanText = rawText;
+            if (cleanText.includes('</think>')) {
+              cleanText = cleanText.split('</think>').pop();
+            }
+            cleanText = cleanText.replace(/<think>[\s\S]*?<\/think>/gi, '').replace(/<think>[\s\S]*/gi, '').trim();
+
+            if (onToken && (cleanText || rawText)) {
+              onToken(deltaContent, cleanText || rawText);
             }
           }
         } catch (e) {
@@ -159,7 +114,11 @@ export async function fetchExplanationStreaming(topic, levelKey = 'CHILD', onTok
     }
   }
 
-  const finalCleanText = sanitizeExplanation(rawText);
+  let finalCleanText = rawText;
+  if (finalCleanText.includes('</think>')) {
+    finalCleanText = finalCleanText.split('</think>').pop();
+  }
+  finalCleanText = finalCleanText.replace(/<think>[\s\S]*?<\/think>/gi, '').replace(/<think>[\s\S]*/gi, '').trim();
 
   const endTime = performance.now();
   const totalLatencyMs = Math.round(endTime - startTime);
@@ -195,7 +154,7 @@ export async function fetchExplanationNonStreaming(topic, levelKey = 'CHILD') {
         { role: 'system', content: systemPrompt },
         { role: 'user', content: `Explain this topic clearly: "${topic}"` }
       ],
-      temperature: 0.3,
+      temperature: 0.4,
       max_tokens: 700,
       stream: false
     })
@@ -207,6 +166,9 @@ export async function fetchExplanationNonStreaming(topic, levelKey = 'CHILD') {
   }
 
   const data = await response.json();
-  const rawText = data.choices[0]?.message?.content || '';
-  return sanitizeExplanation(rawText);
+  let rawText = data.choices[0]?.message?.content || '';
+  if (rawText.includes('</think>')) {
+    rawText = rawText.split('</think>').pop();
+  }
+  return rawText.trim();
 }
