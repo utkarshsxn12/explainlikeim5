@@ -24,7 +24,7 @@
 }
 
 .bg-grain {
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.025'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.03'/%3E%3C/svg%3E");
 }
 
 @keyframes cursorBlink {
@@ -36,16 +36,16 @@
   content: '▋';
   display: inline-block;
   margin-left: 2px;
-  color: #111111;
+  color: #1C1917;
   animation: cursorBlink 0.8s infinite;
 }
 
 .dark .typing-cursor::after {
-  color: #FFFFFF;
+  color: #74C69D;
 }
 
 .shimmer-bg {
-  background: linear-gradient(90deg, rgba(0, 0, 0, 0.04) 0%, rgba(0, 0, 0, 0.08) 50%, rgba(0, 0, 0, 0.04) 100%);
+  background: linear-gradient(90deg, rgba(28, 25, 23, 0.05) 0%, rgba(28, 25, 23, 0.12) 50%, rgba(28, 25, 23, 0.05) 100%);
   background-size: 200% 100%;
   animation: shimmer 1.5s infinite;
 }

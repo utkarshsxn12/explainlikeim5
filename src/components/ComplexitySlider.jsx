@@ -13,14 +13,14 @@ export function ComplexitySlider({ selectedLevel, onSelectLevel }) {
 
   return (
     <div className="w-full max-w-3xl mr-auto pl-0 sm:pl-4 pr-0 sm:pr-12 my-6">
-      <div className="flex items-center justify-between mb-2.5 font-mono text-xs uppercase tracking-wider text-neutral-500 dark:text-neutral-400 font-bold">
+      <div className="flex items-center justify-between mb-2.5 font-mono text-xs uppercase tracking-wider text-[#44403C] dark:text-neutral-400 font-bold">
         <span>Target Mode</span>
-        <span className="font-bold tracking-widest text-neutral-900 dark:text-white">
+        <span className="font-bold tracking-widest text-[#1C1917] dark:text-[#74C69D]">
           [{currentConfig.code}] MODE ACTIVE
         </span>
       </div>
 
-      <div className="relative flex items-center bg-white dark:bg-[#121212] p-1.5 border border-neutral-300 dark:border-neutral-800 rounded-none transition-colors duration-300 shadow-xs">
+      <div className="relative flex items-center bg-[#E8E0D5]/50 dark:bg-[#1E1E1E] p-1.5 border-2 border-[#1C1917]/30 dark:border-neutral-700 rounded-2xl transition-colors duration-300 shadow-sm">
         {levels.map(({ key, data }) => {
           const isSelected = selectedLevel === key;
           return (
@@ -30,8 +30,8 @@ export function ComplexitySlider({ selectedLevel, onSelectLevel }) {
               onClick={() => onSelectLevel(key)}
               className={`relative flex-1 flex items-center justify-center gap-2 py-3 px-2 font-mono text-xs font-bold uppercase transition-colors duration-200 ${
                 isSelected 
-                  ? 'text-white dark:text-black font-extrabold' 
-                  : 'text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white'
+                  ? 'text-[#FAF6EE] dark:text-slate-950 font-black' 
+                  : 'text-[#1C1917] dark:text-neutral-400 hover:text-slate-900 dark:hover:text-white'
               }`}
             >
               <motion.span
@@ -45,7 +45,7 @@ export function ComplexitySlider({ selectedLevel, onSelectLevel }) {
               {isSelected && (
                 <motion.div
                   layoutId="sliderIndicator"
-                  className="absolute inset-0 bg-neutral-900 dark:bg-white rounded-none shadow-xs z-10"
+                  className="absolute inset-0 bg-[#1C1917] dark:bg-[#74C69D] rounded-xl shadow-md z-10"
                   transition={{ type: 'spring', stiffness: 500, damping: 30 }}
                 />
               )}
@@ -59,9 +59,9 @@ export function ComplexitySlider({ selectedLevel, onSelectLevel }) {
         initial={{ opacity: 0, x: -5 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.3 }}
-        className="text-xs text-neutral-500 dark:text-neutral-400 mt-2.5 font-sans italic flex items-center gap-2 font-medium"
+        className="text-xs text-[#44403C] dark:text-neutral-400 mt-2.5 font-sans italic flex items-center gap-2 font-medium"
       >
-        <span className="w-1.5 h-1.5 rounded-full bg-neutral-900 dark:bg-white"></span>
+        <span className="w-1.5 h-1.5 rounded-full bg-[#1C1917] dark:bg-[#74C69D]"></span>
         "{currentConfig.description}"
       </motion.p>
     </div>

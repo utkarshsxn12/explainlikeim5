@@ -30,10 +30,10 @@ export function WorkflowSection() {
   return (
     <div className="w-full max-w-3xl mr-auto pl-0 sm:pl-4 pr-0 sm:pr-12 my-8">
       <div className="flex items-center justify-between mb-4">
-        <div className="font-mono text-xs uppercase tracking-widest text-neutral-500 dark:text-neutral-400 font-bold">
+        <div className="font-mono text-xs uppercase tracking-widest text-[#44403C] dark:text-neutral-400 font-bold">
           HOW IT WORKS — 3-STEP PIPELINE
         </div>
-        <span className="font-mono text-[10px] uppercase tracking-wider text-neutral-400 dark:text-neutral-500">
+        <span className="font-mono text-[10px] uppercase tracking-wider text-[#44403C]/80 dark:text-neutral-500 font-bold">
           ZERO JARGON
         </span>
       </div>
@@ -48,20 +48,20 @@ export function WorkflowSection() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4, delay: idx * 0.1 }}
               whileHover={{ y: -3 }}
-              className="p-5 bg-white dark:bg-[#121212] border border-neutral-200 dark:border-neutral-800 transition-all duration-300 rounded-none shadow-xs hover:border-neutral-900 dark:hover:border-white group"
+              className="p-5 bg-[#E8E0D5]/50 dark:bg-[#1E1E1E] border border-[#1C1917]/20 dark:border-neutral-800 transition-all duration-300 rounded-2xl shadow-xs hover:border-[#1C1917] dark:hover:border-[#74C69D] group"
             >
               <div className="flex items-center justify-between mb-3">
-                <span className="font-mono text-xs font-bold px-2 py-0.5 bg-neutral-100 dark:bg-neutral-900 text-neutral-900 dark:text-white border border-neutral-200 dark:border-neutral-800">
+                <span className="font-mono text-xs font-bold px-2.5 py-0.5 bg-[#1C1917] dark:bg-[#74C69D] text-[#FAF6EE] dark:text-black rounded-md">
                   {s.badge}
                 </span>
-                <IconComp className="w-4 h-4 text-neutral-400 group-hover:text-neutral-900 dark:group-hover:text-white transition-colors" />
+                <IconComp className="w-4 h-4 text-[#44403C] dark:text-neutral-400 group-hover:text-[#1C1917] dark:group-hover:text-[#74C69D] transition-colors" />
               </div>
 
-              <h4 className="font-serif italic font-bold text-lg text-neutral-900 dark:text-white mb-2">
+              <h4 className="font-serif italic font-bold text-xl text-[#1C1917] dark:text-white mb-2">
                 {s.title}
               </h4>
 
-              <p className="text-xs text-neutral-600 dark:text-neutral-400 leading-relaxed font-sans font-normal">
+              <p className="text-xs text-[#44403C] dark:text-neutral-400 leading-relaxed font-sans font-medium">
                 {s.desc}
               </p>
             </motion.div>
