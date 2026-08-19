@@ -2,8 +2,8 @@ import { COMPLEXITY_LEVELS, EASTER_EGG_PROMPT } from '../utils/prompts';
 
 const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
 const MODEL_CANDIDATES = [
-  'openai/gpt-oss-20b',
   'qwen/qwen3.6-27b',
+  'openai/gpt-oss-20b',
   'openai/gpt-oss-120b',
   'groq/compound-mini'
 ];
@@ -26,15 +26,18 @@ export async function fetchExplanationStreaming(topic, levelKey = 'CHILD', onTok
 
   for (const modelName of MODEL_CANDIDATES) {
     try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 5000);
+
       const res = await fetch(GROQ_API_URL, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${apiKey}`
         },
+        signal: controller.signal,
         body: JSON.stringify({
           model: modelName,
-          reasoning_format: 'hidden',
           messages: [
             { role: 'system', content: systemPrompt },
             { role: 'user', content: `Explain this topic clearly: "${topic}"` }
@@ -44,6 +47,8 @@ export async function fetchExplanationStreaming(topic, levelKey = 'CHILD', onTok
           stream: true
         })
       });
+
+      clearTimeout(timeoutId);
 
       if (res.ok) {
         response = res;
@@ -65,7 +70,7 @@ export async function fetchExplanationStreaming(topic, levelKey = 'CHILD', onTok
 
   const reader = response.body.getReader();
   const decoder = new TextDecoder('utf-8');
-  let fullRawText = '';
+  let rawText = '';
   let buffer = '';
 
   while (true) {
@@ -86,26 +91,26 @@ export async function fetchExplanationStreaming(topic, levelKey = 'CHILD', onTok
         try {
           const parsed = JSON.parse(jsonStr);
           const deltaContent = parsed.choices[0]?.delta?.content || '';
+          const deltaReasoning = parsed.choices[0]?.delta?.reasoning || '';
+          const delta = deltaContent || deltaReasoning || '';
 
-          if (deltaContent) {
-            fullRawText += deltaContent;
+          if (delta) {
+            if (!firstTokenTime) {
+              firstTokenTime = performance.now();
+            }
+            rawText += delta;
 
-            let cleaned = fullRawText;
-            if (cleaned.includes('<think>')) {
-              if (cleaned.includes('</think>')) {
-                cleaned = cleaned.split('</think>').pop();
-              } else {
-                cleaned = '';
-              }
+            let cleanText = rawText;
+            if (cleanText.includes('</think>')) {
+              cleanText = cleanText.split('</think>').pop();
+            } else if (cleanText.includes('<think>')) {
+              cleanText = '';
             }
 
-            cleaned = cleaned.replace(/<think>[\s\S]*?<\/think>/gi, '').replace(/<think>[\s\S]*/gi, '').trim();
+            cleanText = cleanText.trim();
 
-            if (cleaned && onToken) {
-              if (!firstTokenTime) {
-                firstTokenTime = performance.now();
-              }
-              onToken(deltaContent, cleaned);
+            if (onToken) {
+              onToken(delta, cleanText || rawText.replace(/<think>[\s\S]*?<\/think>/gi, '').trim());
             }
           }
         } catch (e) {
@@ -114,22 +119,20 @@ export async function fetchExplanationStreaming(topic, levelKey = 'CHILD', onTok
     }
   }
 
-  let finalCleanedText = fullRawText;
-  if (finalCleanedText.includes('<think>')) {
-    if (finalCleanedText.includes('</think>')) {
-      finalCleanedText = finalCleanedText.split('</think>').pop();
-    } else {
-      finalCleanedText = '';
-    }
+  let finalCleanText = rawText;
+  if (finalCleanText.includes('</think>')) {
+    finalCleanText = finalCleanText.split('</think>').pop();
+  } else if (finalCleanText.includes('<think>')) {
+    finalCleanText = finalCleanText.replace(/<think>[\s\S]*?<\/think>/gi, '').replace(/<think>[\s\S]*/gi, '');
   }
-  finalCleanedText = finalCleanedText.replace(/<think>[\s\S]*?<\/think>/gi, '').replace(/<think>[\s\S]*/gi, '').trim();
+  finalCleanText = finalCleanText.trim();
 
   const endTime = performance.now();
   const totalLatencyMs = Math.round(endTime - startTime);
   const ttfbMs = firstTokenTime ? Math.round(firstTokenTime - startTime) : totalLatencyMs;
 
   return {
-    text: finalCleanedText || fullRawText,
+    text: finalCleanText || rawText,
     latencyMs: totalLatencyMs,
     ttfbMs: ttfbMs,
     isEasterEgg
@@ -154,7 +157,6 @@ export async function fetchExplanationNonStreaming(topic, levelKey = 'CHILD') {
     },
     body: JSON.stringify({
       model: MODEL_CANDIDATES[0],
-      reasoning_format: 'hidden',
       messages: [
         { role: 'system', content: systemPrompt },
         { role: 'user', content: `Explain this topic clearly: "${topic}"` }
@@ -171,6 +173,9 @@ export async function fetchExplanationNonStreaming(topic, levelKey = 'CHILD') {
   }
 
   const data = await response.json();
-  const rawText = data.choices[0]?.message?.content || '';
-  return rawText.replace(/<think>[\s\S]*?<\/think>/gi, '').trim();
+  let rawText = data.choices[0]?.message?.content || '';
+  if (rawText.includes('</think>')) {
+    rawText = rawText.split('</think>').pop();
+  }
+  return rawText.trim();
 }

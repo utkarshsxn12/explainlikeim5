@@ -10,6 +10,14 @@ import { GridBackground } from './components/GridBackground';
 import { fetchExplanationStreaming } from './services/groqService';
 import { COMPLEXITY_LEVELS } from './utils/prompts';
 
+const KONAMI_CODE = [
+  'ArrowUp', 'ArrowUp', 
+  'ArrowDown', 'ArrowDown', 
+  'ArrowLeft', 'ArrowRight', 
+  'ArrowLeft', 'ArrowRight', 
+  'b', 'a'
+];
+
 export default function App() {
   const [topic, setTopic] = useState('');
   const [activeTopic, setActiveTopic] = useState('');
@@ -23,6 +31,7 @@ export default function App() {
   const [sessionCount, setSessionCount] = useState(0);
   const [showEasterEgg, setShowEasterEgg] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
+  const [konamiIndex, setKonamiIndex] = useState(0);
 
   const modeConfig = COMPLEXITY_LEVELS[selectedLevel] || COMPLEXITY_LEVELS.CHILD;
 
@@ -33,6 +42,28 @@ export default function App() {
       document.documentElement.classList.remove('dark');
     }
   }, [isDarkMode]);
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      const expectedKey = KONAMI_CODE[konamiIndex].toLowerCase();
+      const pressedKey = e.key.toLowerCase();
+
+      if (pressedKey === expectedKey) {
+        const nextIndex = konamiIndex + 1;
+        if (nextIndex === KONAMI_CODE.length) {
+          setShowEasterEgg(true);
+          setKonamiIndex(0);
+        } else {
+          setKonamiIndex(nextIndex);
+        }
+      } else {
+        setKonamiIndex(0);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [konamiIndex]);
 
   const handleToggleDarkMode = () => {
     setIsDarkMode(prev => !prev);
@@ -61,9 +92,9 @@ export default function App() {
       const result = await fetchExplanationStreaming(
         cleanTopic,
         levelKey,
-        (tokenDelta) => {
+        (tokenDelta, cleanText) => {
           setIsStreaming(true);
-          setExplanationText(prev => prev + tokenDelta);
+          setExplanationText(cleanText);
         },
         () => {
           setIsLoading(false);
@@ -104,6 +135,7 @@ export default function App() {
         isDarkMode={isDarkMode} 
         onToggleDarkMode={handleToggleDarkMode} 
         sessionCount={sessionCount} 
+        onTriggerEasterEgg={() => setShowEasterEgg(true)}
       />
 
       <main className="flex-1 max-w-5xl mx-auto w-full px-4 pb-16 flex flex-col items-center relative z-10">
