@@ -1,4 +1,4 @@
-import { COMPLEXITY_LEVELS, EASTER_EGG_PROMPT } from '../utils/prompts';
+import { COMPLEXITY_LEVELS, EASTER_EGG_PROMPT, ROAST_PROMPT, CHAI_PROMPT } from '../utils/prompts';
 
 const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
 const MODEL_CANDIDATES = [
@@ -62,15 +62,23 @@ export async function fetchExplanationStreaming(topic, levelKey = 'CHILD', onTok
     throw new Error('Groq API Key is missing. Please set VITE_GROQ_API_KEY in .env.local');
   }
 
-  const isEasterEgg = topic.trim().toLowerCase() === '42' || topic.trim().toLowerCase() === 'meaning of life';
+  const cleanTopic = topic.trim().toLowerCase();
+  const isEasterEgg = cleanTopic === '42' || cleanTopic === 'meaning of life';
+  const isRoast = cleanTopic.includes('roast') || cleanTopic === 'roast me';
+  const isChai = cleanTopic === 'chai' || cleanTopic === 'tea' || cleanTopic === 'stress';
+
   const levelConfig = COMPLEXITY_LEVELS[levelKey] || COMPLEXITY_LEVELS.CHILD;
-  const systemPrompt = isEasterEgg ? EASTER_EGG_PROMPT : levelConfig.systemPrompt;
+  let systemPrompt = levelConfig.systemPrompt;
+  if (isEasterEgg) systemPrompt = EASTER_EGG_PROMPT;
+  else if (isRoast) systemPrompt = ROAST_PROMPT;
+  else if (isChai) systemPrompt = CHAI_PROMPT;
 
   const startTime = performance.now();
   let firstTokenTime = null;
 
   let response = null;
   let lastErrorMsg = '';
+
 
   for (const modelName of MODEL_CANDIDATES) {
     try {

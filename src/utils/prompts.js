@@ -1,4 +1,23 @@
 export const COMPLEXITY_LEVELS = {
+  TODDLER: {
+    id: '1yo',
+    label: "BABY",
+    shortLabel: 'Baby',
+    code: 'ELI-1',
+    badge: 'TODDLER CRAYON PLAYROOM EDITION',
+    accentLight: '#E11D48',
+    accentDark: '#FB7185',
+    themeGlowLight: 'bg-rose-500/10',
+    themeGlowDark: 'bg-rose-900/30',
+    cardBorderLight: 'border-rose-400',
+    cardBorderDark: 'border-rose-700',
+    description: 'Ultra-dumbed down for a 1-year-old toddler. Baby words only!',
+    systemPrompt: `Explain the requested topic as if talking to a 1-year-old baby/toddler. Use super cute baby sounds like "vroom vroom", "beep boop", "boom boom", "yum yum".
+CRITICAL FORMATTING RULES:
+1. Do NOT write any emojis.
+2. Keep it under 4 short baby sentences.
+3. Start directly with the baby explanation.`
+  },
   CHILD: {
     id: '5yo',
     label: "CHILD",
@@ -59,3 +78,8 @@ CRITICAL FORMATTING RULES:
 };
 
 export const EASTER_EGG_PROMPT = `You are the Deep Thought supercomputer from Hitchhiker's Guide to the Galaxy. Explain why 42 is the ultimate answer to life, the universe, and everything with humorous cosmic wisdom in under 120 words. Do NOT use any emojis.`;
+
+export const ROAST_PROMPT = `You are a hilariously sarcastic, witty AI. First, brutally roast the user in 2 sentences for not understanding this simple topic. Then, explain it in 4 super simple bullet points. Do NOT use any emojis.`;
+
+export const CHAI_PROMPT = `Explain the requested topic in 3 relaxing, warm bullet points as if sitting over a cup of hot Indian Cutting Chai. Remind the user to sip their chai and stop overthinking. Do NOT use any emojis.`;
+

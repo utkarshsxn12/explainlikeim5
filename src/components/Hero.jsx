@@ -16,11 +16,68 @@ const ROTATING_SUBTEXTS = [
   { text: "No cap, no jargon, no 45-minute YouTube video required.", duration: 3000 },
   { text: "Ask literally anything. We'll explain it before you finish overthinking.", duration: 3000 },
   { text: "Big words in. Simple answers out. Ego optional.", duration: 3000 },
-  { text: "Faster than your professor's office hours. Way less awkward.", duration: 3000 },
+  { text: "Psst... click [SECRETS] to solve the decryption cipher!", duration: 4000 },
   { text: "Skip the PhD. Skip the confusion. Just skip to the answer.", duration: 3000 },
   { text: "Type your confusion. We'll roast the complexity out of it.", duration: 3000 },
   { text: "That thing you nodded along to but never understood? Type it here.", duration: 4500, isSpecial: true }
 ];
+
+function WavyTagline() {
+  const fullText = "FOR ALL THE COMPLEX STUFF YOU CONFIDENTLY NODDED ALONG TO WITH ABSOLUTELY ZERO CLUE.";
+  const words = fullText.split(" ");
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: -12, scale: 0.97 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      transition={{ duration: 0.6, ease: 'easeOut' }}
+      className="relative mb-8 inline-flex items-center justify-center px-6 py-2.5 rounded-full border-2 border-[#1C1917]/20 dark:border-[#8EA8C3]/40 bg-[#E8E0D5]/70 dark:bg-[#112240]/80 backdrop-blur-md shadow-md overflow-hidden group hover:border-[#1C1917]/40 dark:hover:border-[#F0F4F8]/60 transition-all duration-300 max-w-full text-center"
+    >
+      {/* Background Animated Subtle Gradient Wave Sweep */}
+      <div 
+        className="absolute inset-0 bg-gradient-to-r from-transparent via-amber-500/10 dark:via-sky-400/15 to-transparent -translate-x-full animate-[waveSweep_4s_infinite_linear] pointer-events-none"
+      />
+
+      {/* Gentle & Subtle Wavy Animated Text */}
+      <div className="font-mono text-xs sm:text-xs text-[#1C1917] dark:text-[#F0F4F8] uppercase tracking-widest font-extrabold flex flex-wrap items-center justify-center gap-x-1.5 gap-y-1">
+        {words.map((word, wordIdx) => {
+          const isHighlighted = word.includes("CONFIDENTLY") || word.includes("NODDED") || word.includes("ABSOLUTELY") || word.includes("ZERO") || word.includes("CLUE");
+          return (
+            <span 
+              key={wordIdx} 
+              className={`inline-flex ${
+                isHighlighted 
+                  ? 'text-amber-800 dark:text-sky-300 font-black drop-shadow-[0_0_8px_rgba(245,158,11,0.35)] dark:drop-shadow-[0_0_8px_rgba(56,189,248,0.45)] underline decoration-amber-500/40 dark:decoration-sky-400/40 underline-offset-4' 
+                  : 'text-[#332F2C] dark:text-[#CBD5E1]'
+              }`}
+            >
+              {word.split("").map((char, charIdx) => {
+                const totalCharIndex = wordIdx * 5 + charIdx;
+                return (
+                  <motion.span
+                    key={charIdx}
+                    animate={{ y: [0, -1.2, 0] }}
+                    transition={{
+                      duration: 3.2,
+                      repeat: Infinity,
+                      repeatType: "reverse",
+                      ease: "easeInOut",
+                      delay: totalCharIndex * 0.05,
+                    }}
+                    className="inline-block"
+                  >
+                    {char}
+                  </motion.span>
+                );
+              })}
+            </span>
+          );
+        })}
+      </div>
+    </motion.div>
+  );
+}
+
 
 export function Hero({ topic, setTopic, onSubmit, isLoading, activeTopic, selectedLevel }) {
   const [currentText, setCurrentText] = useState('');
@@ -85,13 +142,8 @@ export function Hero({ topic, setTopic, onSubmit, isLoading, activeTopic, select
 
   return (
     <div className="relative pt-10 pb-6 px-6 max-w-5xl mx-auto w-full flex flex-col items-center">
-      <motion.p 
-        initial={{ opacity: 0, y: -10 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="font-mono text-xs text-[#44403C] dark:text-[#8EA8C3] uppercase tracking-widest mb-8 text-center font-bold"
-      >
-        FOR ALL THE COMPLEX STUFF YOU NODDED ALONG TO BUT HAD ZERO CLUE ABOUT.
-      </motion.p>
+      <WavyTagline />
+
 
       <motion.h1 
         initial={{ opacity: 0, y: 15 }}

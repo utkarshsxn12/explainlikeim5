@@ -4,12 +4,14 @@ import { COMPLEXITY_LEVELS } from '../utils/prompts';
 
 export function ComplexitySlider({ selectedLevel, onSelectLevel }) {
   const levels = [
+    ...(selectedLevel === 'TODDLER' ? [{ key: 'TODDLER', data: COMPLEXITY_LEVELS.TODDLER }] : []),
     { key: 'CHILD', data: COMPLEXITY_LEVELS.CHILD },
     { key: 'TEEN', data: COMPLEXITY_LEVELS.TEEN },
     { key: 'EXPERT', data: COMPLEXITY_LEVELS.EXPERT },
   ];
 
   const currentConfig = COMPLEXITY_LEVELS[selectedLevel] || COMPLEXITY_LEVELS.CHILD;
+
 
   return (
     <div className="w-full max-w-3xl mx-auto my-6">
